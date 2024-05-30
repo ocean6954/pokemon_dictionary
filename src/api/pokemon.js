@@ -19,7 +19,6 @@ export const getJapaneseName = async (englishName) => {
       `${BASE_URL}pokemon-species/${englishName.toLowerCase()}`
     );
     const data = response.data;
-    // console.log("getJapaneseNameが呼ばれました", data);
     for (let nameInfo of data.names) {
       if (nameInfo.language.name === "ja-Hrkt") {
         return nameInfo.name;
@@ -35,7 +34,12 @@ export const getJapaneseType = (englishType) => {
   const filteredType = TYPESETS.filter(
     (set) => set.name.indexOf(englishType.type.name) !== -1
   );
-  return filteredType[0].japanese_name;
+  return filteredType[0];
+};
+
+export const getTypeColor = (name) => {
+  const type = TYPESETS.find((set) => set.name === name);
+  return type.color;
 };
 
 export const getPokemon = (url) => {
