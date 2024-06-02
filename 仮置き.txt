@@ -1,0 +1,18 @@
+ //うまくいかないやつ
+  /* background: ${({ type1, type2 }) =>
+    `linear-gradient(135deg, ${type1} 0 50 %, ${type2} 50 % 100 %)`}; */
+
+  //ネットの記事を元に改変したやつ
+  /* background: linear-gradient(
+    135deg,
+    ${({ type1 }) => type1} 0 50%,
+    ${({ type2 }) => type2} 50% 100%
+  ); */
+
+  /* //ネットのやつ
+  background: linear-gradient(
+    to right,
+    ${(props) => props.type1},
+    ${(props) => props.type2}
+  ); */
+  /* transition: all, 0.3s; */

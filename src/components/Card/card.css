@@ -1,9 +1,33 @@
-.cardName {
-  padding: 0;
-  font-size: 24px;
-  margin-top: 10px;
-}
+.diagonal-div {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+  background-color: lightblue;
 
-.cardType span {
-  margin: 0 5px;
+  border-radius: 10px; /* 角を丸くする */
+}
+.diagonal-div::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background-color: red;
+  transform: skewY(45deg);
+  transform-origin: top left;
+  border-radius: 10px;
+}
+.diagonal-div::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  background-color: blue;
+  transform: skewY(45deg);
+  transform-origin: top right;
+  border-radius: 10px;
 }

@@ -1,18 +1,34 @@
-import "./card.css";
 import {
   getJapaneseName,
   getJapaneseType,
   getTypeColor,
 } from "../../api/pokemon";
 import { useEffect, useState } from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 const StyledCard = styled.div`
   width: 290px;
   box-shadow: 2px 8px 21px -2px #777;
   border-radius: 10px;
-
   position: relative;
+`;
+
+const ToLeftBottom = keyframes`
+  0% {
+        transform: translate(100%, -100%);
+    }
+    100% {
+        transform: translate(0%, 0%) skewY(45deg);
+    }
+`;
+
+const ToRightTop = keyframes`
+  0% {
+        transform: translate(-100%, 100%);
+    }
+    100% {
+        transform: translate(0%, 0%) skewY(45deg);
+    }
 `;
 
 const StyledCardBack = styled.div`
@@ -21,22 +37,48 @@ const StyledCardBack = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  opacity: 0.8;
+  opacity: 0.7;
   z-index: -1;
   border-radius: 10px;
-  /* background: ${({ type1, type2 }) =>
-    `linear-gradient(135deg, ${type1} 0 50 %, ${type2} 50 % 100 %)`}; */
-  background: linear-gradient(
-    135deg,
-    ${({ type1 }) => type1} 0 50%,
-    ${({ type2 }) => type2} 50% 100%
-  );
-  /* background: linear-gradient(
-    to right,
-    ${(props) => props.type1},
-    ${(props) => props.type2}
-  ); */
-  transition: all, 0.3s;
+  overflow: hidden;
+
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* z-index: 1; */
+    border-radius: 5px;
+  }
+
+  &::before {
+    background-color: ${({ type1 }) => type1};
+    transform: skewY(45deg);
+    transform-origin: top left;
+    animation: ${ToRightTop} 1.5s linear forwards;
+  }
+
+  &::after {
+    background-color: ${({ type2 }) => type2};
+    transform: skewY(45deg);
+    transform-origin: top right;
+    animation: ${ToLeftBottom} 1.5s linear forwards;
+  }
+`;
+
+const StyledCardName = styled.div`
+  padding: 0;
+  font-size: 24px;
+  margin-top: 14px;
+`;
+
+const StyledCardTypeSpan = styled.span`
+  padding: 0;
+  font-size: 24px;
+  margin-top: 10px;
 `;
 
 export const Card = ({ pokemon }) => {
@@ -67,39 +109,50 @@ export const Card = ({ pokemon }) => {
   }, [pokemon]);
 
   return (
-    <StyledCard>
-      <StyledCardBack
-        type1={twoTypeColor.type1}
-        type2={twoTypeColor.type2}
-      ></StyledCardBack>
-      <div className="carImg">
-        <img src={pokemon.sprites.front_default} alt="ポケモンのフロント画像" />
-        <h3 className="cardName">{japaneseName}</h3>
-        <div className="cardType">
-          <div>タイプ</div>
-          {pokemon.types.map((type) => {
-            const { japanese_name } = getJapaneseType(type);
-            return (
-              <span className="typeName" key={pokemon.name + type.type.name}>
-                {japanese_name}
-              </span>
-            );
-          })}
+    <>
+      <StyledCard>
+        <StyledCardBack
+          type1={twoTypeColor.type1}
+          type2={twoTypeColor.type2}
+        ></StyledCardBack>
+
+        <div className="carImg">
+          <img
+            src={pokemon.sprites.front_default}
+            alt="ポケモンのフロント画像"
+          />
+          <StyledCardName>{japaneseName}</StyledCardName>
+          <div className="cardType">
+            <div>タイプ</div>
+            {pokemon.types.map((type) => {
+              const { japanese_name } = getJapaneseType(type);
+              return (
+                <span key={pokemon.name + type.type.name}>{japanese_name}</span>
+              );
+            })}
+          </div>
+          <div className="carInfo">
+            <div className="cardData">
+              <p className="title">
+                重さ: {(pokemon.weight / 10).toFixed(1)}kg
+              </p>
+            </div>
+            <div className="cardData">
+              <p className="title">高さ: {(pokemon.height / 10).toFixed(1)}m</p>
+            </div>
+            <div className="cardData">
+              <p className="title">
+                {/* アビリティ: {pokemon.abilities[0].ability.name} */}
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="carInfo">
-          <div className="cardData">
-            <p className="title">重さ: {(pokemon.weight / 10).toFixed(1)}kg</p>
-          </div>
-          <div className="cardData">
-            <p className="title">高さ: {(pokemon.height / 10).toFixed(1)}m</p>
-          </div>
-          <div className="cardData">
-            <p className="title">
-              {/* アビリティ: {pokemon.abilities[0].ability.name} */}
-            </p>
-          </div>
-        </div>
-      </div>
-    </StyledCard>
+      </StyledCard>
+    </>
   );
 };
+
+//  <img
+//       src={pokemon.sprites.other["official-artwork"].front_default}
+//       alt="ポケモンのフロント画像"
+//     />
