@@ -6,11 +6,21 @@ import {
 import { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 
+const addShadow = keyframes`
+  0% {
+    box-shadow: none;
+  }
+  100% {
+    box-shadow: 2px 8px 21px -2px #777;  
+  }
+`;
+
 const StyledCard = styled.div`
   width: 290px;
-  box-shadow: 2px 8px 21px -2px #777;
+  /* box-shadow: 2px 8px 21px -2px #777; */
   border-radius: 10px;
   position: relative;
+  animation: ${addShadow} 2s linear forwards;
 `;
 
 const ToLeftBottom = keyframes`
