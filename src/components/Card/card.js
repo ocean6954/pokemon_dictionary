@@ -24,21 +24,32 @@ const StyledCard = styled.div`
 `;
 
 const ToLeftBottom = keyframes`
-  0% {
+  /* 0% {
         transform: translate(100%, -100%);
     }
     100% {
         transform: translate(0%, 0%) skewY(45deg);
-    }
+    } */
+
+  0% {
+    height: 0;
+
+  }
+  100% {
+    height: 100%;
+  }
 `;
 
 const ToRightTop = keyframes`
-  0% {
-        transform: translate(-100%, 100%);
-    }
-    100% {
-        transform: translate(0%, 0%) skewY(45deg);
-    }
+  /* 0% {
+    transform: translate(-100%, 100%);
+  }
+  100%{
+    transform: translate(0%, 0%) skewY(45deg);
+  } */
+
+  0% {transform: skewY(45deg) scaleY(0);}
+  100% {transform: skewY(45deg) scaleY(1);}
 `;
 
 const StyledCardBack = styled.div`
@@ -67,7 +78,7 @@ const StyledCardBack = styled.div`
   &::before {
     background-color: ${({ type1 }) => type1};
     transform: skewY(45deg);
-    transform-origin: top left;
+    transform-origin: bottom left;
     animation: ${ToRightTop} 1.5s linear forwards;
   }
 
@@ -120,12 +131,13 @@ export const Card = ({ pokemon }) => {
 
   return (
     <>
+      {/* <Test /> */}
+
       <StyledCard>
         <StyledCardBack
           type1={twoTypeColor.type1}
           type2={twoTypeColor.type2}
         ></StyledCardBack>
-
         <div className="carImg">
           <img
             src={pokemon.sprites.front_default}
