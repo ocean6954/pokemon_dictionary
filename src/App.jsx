@@ -3,6 +3,8 @@ import "./App.css";
 import { getAllPokemon, getPokemon, getJapaneseName } from "./api/pokemon";
 import { Card } from "./components/Card/card";
 import Navbar from "./components/Navbar/Navbar";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 function App() {
   const initialURL = "https://pokeapi.co/api/v2/pokemon";
@@ -58,10 +60,14 @@ function App() {
     <div className="App">
       <Navbar />
       {loading ? (
-        <p>loading....</p>
+        <div className="pokemonCardContainer">
+          {[...Array(20)].map((_, index) => (
+            <Skeleton key={index} className="skeleton-card" />
+          ))}
+        </div>
       ) : (
         <div className="pokemonCardContainer">
-          {pokemonData.map((pokemon, i) => {
+          {pokemonData.map((pokemon) => {
             return <Card key={pokemon.name} pokemon={pokemon}></Card>;
           })}
         </div>

@@ -34,3 +34,8 @@
   transform: translateY(5px);
   box-shadow: none;
 }
+
+.skeleton-card {
+  width: var(--card-width);
+  height: var(--card-height);
+}

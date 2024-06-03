@@ -5,6 +5,7 @@ import {
 } from "../../api/pokemon";
 import { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
+// import Test from "./test";
 
 const addShadow = keyframes`
   0% {
@@ -16,7 +17,8 @@ const addShadow = keyframes`
 `;
 
 const StyledCard = styled.div`
-  width: 290px;
+  width: var(--card-width);
+
   /* box-shadow: 2px 8px 21px -2px #777; */
   border-radius: 10px;
   position: relative;
@@ -24,16 +26,8 @@ const StyledCard = styled.div`
 `;
 
 const ToLeftBottom = keyframes`
-  /* 0% {
-        transform: translate(100%, -100%);
-    }
-    100% {
-        transform: translate(0%, 0%) skewY(45deg);
-    } */
-
   0% {
     height: 0;
-
   }
   100% {
     height: 100%;
@@ -41,13 +35,6 @@ const ToLeftBottom = keyframes`
 `;
 
 const ToRightTop = keyframes`
-  /* 0% {
-    transform: translate(-100%, 100%);
-  }
-  100%{
-    transform: translate(0%, 0%) skewY(45deg);
-  } */
-
   0% {transform: skewY(45deg) scaleY(0);}
   100% {transform: skewY(45deg) scaleY(1);}
 `;
@@ -131,8 +118,6 @@ export const Card = ({ pokemon }) => {
 
   return (
     <>
-      {/* <Test /> */}
-
       <StyledCard>
         <StyledCardBack
           type1={twoTypeColor.type1}

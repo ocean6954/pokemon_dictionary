@@ -4,7 +4,8 @@ const ToLeftBottom = keyframes`
   0% { height: 0;} 100% {height: 100%;}
 `;
 const ToRightTop = keyframes`
-  0% { transform: skewY(45deg) scaleY(0);} 100% {transform: skewY(45deg) scaleY(1);}
+  /* 0% { transform: skewY(45deg) scaleY(0);} 100% {transform: skewY(45deg) scaleY(1);} */
+  0% { transform: skewY(45deg) scaleX(0);} 100% {transform: skewY(45deg) scaleX(1);}
   `;
 const StyledAdult = styled.div`
   width: 300px;
@@ -18,7 +19,7 @@ const StyledOrange = styled.div`
   height: 200px;
   background-color: orange;
   opacity: 0.5;
-  transform-origin: bottom left;
+  transform-origin: bottom right;
   /* transform: skewY(45deg) scaleY(0.1); */
 
   animation: ${ToRightTop} 1.5s linear forwards;
