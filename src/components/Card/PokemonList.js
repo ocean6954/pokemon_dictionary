@@ -29,7 +29,7 @@ const Styledlist = styled.li`
   }
 `;
 
-const PokemonList = React.memo(({ pokemonData, isFeatured, onClick }) => {
+const PokemonList = React.memo(({ pokemonData, isFeatured, onMouseEnter }) => {
   const [japaneseName, setJapaneseName] = useState("");
 
   useEffect(() => {
@@ -48,7 +48,7 @@ const PokemonList = React.memo(({ pokemonData, isFeatured, onClick }) => {
     <>
       <Styledlist
         isSelected={pokemonData.status}
-        onClick={onClick}
+        onMouseEnter={onMouseEnter}
         className={isFeatured ? "featured" : ""}
       >
         <p>No.{formatNumberToThreeDigits(pokemonData.id)}</p>

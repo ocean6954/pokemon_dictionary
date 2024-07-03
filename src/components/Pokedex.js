@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import {
   getAllPokemon,
   getPokemon,
@@ -11,6 +11,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import PokemonList from "./Card/PokemonList";
 import styled from "styled-components";
 import { Pokemon } from "./Card/Pokemon";
+import HoverExample from "./Card/TestCard";
 
 const StyledImageContainer = styled.div`
   width: 45%;
@@ -114,6 +115,7 @@ const Pokedex = () => {
         <div style={styles}>
           <StyledImageContainer type1={typeColor1}>
             <Pokemon pokemon={featuredPokemon} />
+            {/* <HoverExample /> */}
           </StyledImageContainer>
           <StyledInfoContainer type2={typeColor2}>
             <ul index={featuredIndex}>
@@ -123,7 +125,11 @@ const Pokedex = () => {
                     key={pokemonData.id}
                     pokemonData={pokemonData}
                     isFeatured={pokemonData.id === featuredIndex}
-                    onClick={toggleFeaturedPokemon.bind(null, pokemonData.id)}
+                    //ホバー or クリックはonClickとonMouseEnterで切り替える
+                    onMouseEnter={toggleFeaturedPokemon.bind(
+                      null,
+                      pokemonData.id
+                    )}
                   />
                 );
               })}

@@ -83,6 +83,14 @@ const StyledCardName = styled.div`
   margin-top: 14px;
 `;
 
+const StyledCardInfo = styled.div``;
+
+const StyledImage = styled.div`
+  width: 100%;
+  height: 100%;
+  /* background-color: red; */
+`;
+
 export const Pokemon = ({ pokemon }) => {
   // console.log("pokemon is", pokemon);
   const [japaneseName, setJapaneseName] = useState("");
@@ -121,11 +129,15 @@ export const Pokemon = ({ pokemon }) => {
           type1={twoTypeColor.type1}
           type2={twoTypeColor.type2}
         ></StyledCardBack>
-        <div className="carImg">
+        <StyledImage>
           <img
             src={pokemon.sprites.front_default}
             alt="ポケモンのフロント画像"
+            // width="200px"
+            height="400px"
           />
+        </StyledImage>
+        {/* <div className="仮置き場">
           <StyledCardName>{japaneseName}</StyledCardName>
           <div className="cardType">
             <div>タイプ</div>
@@ -147,11 +159,11 @@ export const Pokemon = ({ pokemon }) => {
             </div>
             <div className="cardData">
               <p className="title">
-                {/* アビリティ: {pokemon.abilities[0].ability.name} */}
+                アビリティ: {pokemon.abilities[0].ability.name}
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
       </StyledCard>
     </>
   );
