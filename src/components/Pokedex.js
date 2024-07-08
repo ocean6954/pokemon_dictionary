@@ -9,9 +9,9 @@ import Skeleton from "react-loading-skeleton";
 import "./css/pokedex.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import PokemonList from "./Card/PokemonList";
+import PokeInfo from "./Card/PokeInfo";
 import styled from "styled-components";
 import { Pokemon } from "./Card/Pokemon";
-import HoverExample from "./Card/TestCard";
 
 const StyledImageContainer = styled.div`
   width: 45%;
@@ -57,6 +57,7 @@ const Pokedex = () => {
     Object.keys(featuredPokemon).length > 0 && featuredPokemon.types.length > 1
       ? getTypeColor(featuredPokemon.types[1].type.name)
       : typeColor1;
+  const [isDefault, setIsDefault] = useState(true);
 
   useEffect(() => {
     const fetchPokemonData = async () => {
@@ -103,6 +104,10 @@ const Pokedex = () => {
     setFeaturedPokemon(pokemonsData[index - 1]);
   };
 
+  const toggleSidebar = () => {
+    setIsDefault((prev) => !prev);
+  };
+
   return (
     <>
       {loading ? (
@@ -118,22 +123,30 @@ const Pokedex = () => {
             {/* <HoverExample /> */}
           </StyledImageContainer>
           <StyledInfoContainer type2={typeColor2}>
-            <ul index={featuredIndex}>
-              {pokemonsData.map((pokemonData) => {
-                return (
-                  <PokemonListMemo
-                    key={pokemonData.id}
-                    pokemonData={pokemonData}
-                    isFeatured={pokemonData.id === featuredIndex}
-                    //ホバー or クリックはonClickとonMouseEnterで切り替える
-                    onMouseEnter={toggleFeaturedPokemon.bind(
-                      null,
-                      pokemonData.id
-                    )}
-                  />
-                );
-              })}
-            </ul>
+            {isDefault ? (
+              <ul>
+                {pokemonsData.map((pokemonData) => {
+                  return (
+                    <PokemonListMemo
+                      key={pokemonData.id}
+                      pokemonData={pokemonData}
+                      isFeatured={pokemonData.id === featuredIndex}
+                      //ホバー or クリックはonClickとonMouseEnterで切り替える
+                      onMouseEnter={toggleFeaturedPokemon.bind(
+                        null,
+                        pokemonData.id
+                      )}
+                      onClick={toggleSidebar}
+                    />
+                  );
+                })}
+              </ul>
+            ) : (
+              <PokeInfo
+                featuredPokemon={featuredPokemon}
+                onClick={toggleSidebar}
+              />
+            )}
           </StyledInfoContainer>
         </div>
       )}
