@@ -18,19 +18,19 @@ const StyledImageContainer = styled.div`
   background-color: ${({ type1 }) => type1};
   display: flex;
   align-items: center;
-  /* text-align: center; */
 `;
-const StyledInfoContainer = styled.div`
+const StyledSidebar = styled.div`
   width: 55%;
   background-color: ${({ type2 }) => type2};
   overflow: auto;
 `;
 
-// const StyledUl = styled.ul`
-//   & li:nth-child(${({ index }) => index}) {
-//     background-color: orange;
-//   }
-// `;
+const StyledInfoContainer = styled.div`
+  width: 100%;
+  height: 90%;
+  display: flex;
+  align-items: center;
+`;
 
 const PokemonListMemo = React.memo(PokemonList);
 
@@ -122,7 +122,7 @@ const Pokedex = () => {
             <Pokemon pokemon={featuredPokemon} />
             {/* <HoverExample /> */}
           </StyledImageContainer>
-          <StyledInfoContainer type2={typeColor2}>
+          <StyledSidebar type2={typeColor2}>
             {isDefault ? (
               <ul>
                 {pokemonsData.map((pokemonData) => {
@@ -141,12 +141,14 @@ const Pokedex = () => {
                 })}
               </ul>
             ) : (
-              <PokeInfo
-                featuredPokemon={featuredPokemon}
-                onClick={toggleSidebar}
-              />
+              <StyledInfoContainer>
+                <PokeInfo
+                  featuredPokemon={featuredPokemon}
+                  onClick={toggleSidebar}
+                />
+              </StyledInfoContainer>
             )}
-          </StyledInfoContainer>
+          </StyledSidebar>
         </div>
       )}
     </>

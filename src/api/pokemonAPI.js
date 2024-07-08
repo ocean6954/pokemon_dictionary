@@ -43,6 +43,7 @@ export const getPokemonDescription = async (pokemon_id) => {
     );
     const data = response.data;
     let count = 0;
+    console.log("data", data);
     for (let i = data.flavor_text_entries.length - 1; i >= 0; i--) {
       let description = data.flavor_text_entries[i];
       if (description.language.name === "ja-Hrkt") {
