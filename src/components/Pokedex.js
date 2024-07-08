@@ -131,7 +131,6 @@ const Pokedex = () => {
                       key={pokemonData.id}
                       pokemonData={pokemonData}
                       isFeatured={pokemonData.id === featuredIndex}
-                      //ホバー or クリックはonClickとonMouseEnterで切り替える
                       onMouseEnter={toggleFeaturedPokemon.bind(
                         null,
                         pokemonData.id

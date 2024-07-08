@@ -4,17 +4,17 @@ import {
   getJapaneseType,
   getPokemonDescription,
 } from "../../api/pokemonAPI";
+import { FaArrowsRotate } from "react-icons/fa6";
+import { IconContext } from "react-icons";
 
 const PokeInfo = ({ featuredPokemon, onClick }) => {
   console.log("Fetched featuredPokemon:", featuredPokemon); // デバッグ用
 
   const [japaneseName, setJapaneseName] = useState("");
   const [descriptions, setDescriptions] = useState([]);
-  // const [gameSeries, setGameSeries] = useState(0);
+  const [desIndex, setDesIndex] = useState(0);
 
   useEffect(() => {
-    // console.log("deaturedpke is", featuredPokemon);
-
     const fetchJapaneseName = async () => {
       const name = await getJapaneseName(featuredPokemon.name);
       setJapaneseName(name);
@@ -28,6 +28,10 @@ const PokeInfo = ({ featuredPokemon, onClick }) => {
     fetchJapaneseName();
     fetchPokemonDescriptions();
   }, [featuredPokemon]);
+
+  const toggleDescriptions = (index) => {
+    setDesIndex(index === 0 ? 1 : 0);
+  };
 
   return (
     <>
@@ -56,8 +60,11 @@ const PokeInfo = ({ featuredPokemon, onClick }) => {
           </div>
           {descriptions.length > 0 && (
             <div>
-              <p>{descriptions[1].flavor_text}</p>
-              <p>{descriptions[1].version}より</p>
+              <p>{descriptions[desIndex].flavor_text}</p>
+              <p>{descriptions[desIndex].version}より</p>
+              <span onClick={() => toggleDescriptions(desIndex)}>
+                <FaArrowsRotate color={"white"} />
+              </span>
             </div>
           )}
         </div>
