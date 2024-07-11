@@ -1,4 +1,4 @@
-import React, { useEffect, useState, memo } from "react";
+import React, { useEffect, useState } from "react";
 import { getJapaneseName, getPokemonDescription } from "../../api/pokemonAPI";
 import styled from "styled-components";
 import { MonsterBall_b } from "../../images/monster_ball_b.svg";
@@ -29,48 +29,44 @@ const Styledlist = styled.li`
   }
 `;
 
-const PokemonList = React.memo(
-  ({ pokemonData, isFeatured, onMouseEnter, onClick }) => {
-    const [japaneseName, setJapaneseName] = useState("");
-    useEffect(() => {
-      const fetchJapaneseName = async () => {
-        const name = await getJapaneseName(pokemonData.name);
-        setJapaneseName(name);
-      };
-      getPokemonDescription(pokemonData.id);
-      fetchJapaneseName();
-    }, [pokemonData]);
-
-    const formatNumberToThreeDigits = (number) => {
-      return number.toString().padStart(3, "0");
+const PokemonList = ({ pokemonData, isFeatured, onMouseEnter, onClick }) => {
+  const [japaneseName, setJapaneseName] = useState("");
+  useEffect(() => {
+    const fetchJapaneseName = async () => {
+      const name = await getJapaneseName(pokemonData.name);
+      setJapaneseName(name);
     };
+    getPokemonDescription(pokemonData.id);
+    fetchJapaneseName();
+  }, [pokemonData]);
 
-    return (
-      <>
-        <Styledlist
-          isSelected={pokemonData.status}
-          onMouseEnter={onMouseEnter}
-          className={isFeatured ? "featured" : ""}
-          onClick={onClick}
-        >
-          <p>No.{formatNumberToThreeDigits(pokemonData.id)}</p>
-          <p>{japaneseName}</p>
-          {isFeatured ? (
-            <img
-              src={`${process.env.PUBLIC_URL}/monster_ball_w.svg`}
-              alt="モンスターボール画像"
-            ></img>
-          ) : (
-            // console.log(pokemonDataset.status)
-            <img
-              src={`${process.env.PUBLIC_URL}/monster_ball_b.svg`}
-              alt="モンスターボール画像"
-            ></img>
-          )}
-        </Styledlist>
-      </>
-    );
-  }
-);
+  const formatNumberToThreeDigits = (number) => {
+    return number.toString().padStart(3, "0");
+  };
 
+  return (
+    <>
+      <Styledlist
+        isSelected={pokemonData.status}
+        onMouseEnter={onMouseEnter}
+        className={isFeatured ? "featured" : ""}
+        onClick={onClick}
+      >
+        <p>No.{formatNumberToThreeDigits(pokemonData.id)}</p>
+        <p>{japaneseName}</p>
+        {isFeatured ? (
+          <img
+            src={`${process.env.PUBLIC_URL}/monster_ball_w.svg`}
+            alt="モンスターボール画像"
+          ></img>
+        ) : (
+          <img
+            src={`${process.env.PUBLIC_URL}/monster_ball_b.svg`}
+            alt="モンスターボール画像"
+          ></img>
+        )}
+      </Styledlist>
+    </>
+  );
+};
 export default PokemonList;

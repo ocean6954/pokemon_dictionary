@@ -21,8 +21,6 @@ const StyledNavbar = styled.div``;
 const StyledInformation = styled.div``;
 
 const PokeInfo = ({ featuredPokemon, onClick }) => {
-  console.log("Fetched featuredPokemon:", featuredPokemon); // デバッグ用
-
   const [japaneseName, setJapaneseName] = useState("");
   const [descriptions, setDescriptions] = useState([]);
   const [desIndex, setDesIndex] = useState(0);

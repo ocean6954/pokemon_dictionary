@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   getAllPokemon,
   getPokemon,
@@ -10,19 +10,33 @@ import "./css/pokedex.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import PokemonList from "./Card/PokemonList";
 import PokeInfo from "./Card/PokeInfo";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Pokemon } from "./Card/Pokemon";
+
+const StyledMainWrapper = styled.div`
+  text-align: center;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+`;
 
 const StyledImageContainer = styled.div`
   width: 45%;
   background-color: ${({ type1 }) => type1};
+
   display: flex;
   align-items: center;
 `;
 const StyledSidebar = styled.div`
   width: 55%;
+  height: 100vh;
   background-color: ${({ type2 }) => type2};
   overflow: auto;
+`;
+
+const StyledListContainer = styled.ul`
+  width: 100%;
+  height: 90%;
 `;
 
 const StyledInfoContainer = styled.div`
@@ -32,36 +46,57 @@ const StyledInfoContainer = styled.div`
   align-items: center;
 `;
 
-const PokemonListMemo = React.memo(PokemonList);
+const StyledLoadingOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const spin = keyframes` 
+  0% {transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+`;
+
+const StyledLoader = styled.div`
+  border: 4px solid rgba(0, 0, 0, 0.6);
+  border-left: 4px solid #3498db;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: ${spin} 1s linear infinite;
+`;
 
 const Pokedex = () => {
-  const styles = {
-    textAlign: "center",
-    width: "100%",
-    height: "100vh",
-    display: "flex",
-  };
-
   const initialURL = "https://pokeapi.co/api/v2/pokemon";
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [preLoad, setPreLoad] = useState(true);
   const [pokemonsData, setPokemonsData] = useState([]);
+
   const [nextUrl, setNextUrl] = useState("");
   const [previousUrl, setPreviousUrl] = useState("");
-  const [featuredIndex, setFeaturedIndex] = useState(1); // 初期状態は最初のliがフィーチャー
   const [featuredPokemon, setFeaturedPokemon] = useState({});
-  const typeColor1 =
-    Object.keys(featuredPokemon).length > 0
-      ? getTypeColor(featuredPokemon.types[0].type.name)
-      : "#00000000";
-  const typeColor2 =
-    Object.keys(featuredPokemon).length > 0 && featuredPokemon.types.length > 1
-      ? getTypeColor(featuredPokemon.types[1].type.name)
-      : typeColor1;
+  let color1;
+  let color2;
+  if (featuredPokemon && Object.keys(featuredPokemon).length > 0) {
+    color1 = getTypeColor(featuredPokemon.types[0].type.name);
+    color2 = color1;
+    if (featuredPokemon.types.length > 1) {
+      color2 = getTypeColor(featuredPokemon.types[1].type.name);
+    }
+  }
   const [isDefault, setIsDefault] = useState(true);
+  const [scrollableDiv, setScrollableDiv] = useState(null);
 
-  useEffect(() => {
-    const fetchPokemonData = async () => {
-      let res = await getAllPokemon(initialURL);
+  const fetchPokemonData = useCallback(
+    async (url) => {
+      setLoading(true);
+      let res = await getAllPokemon(url);
       let _pokemonData = await Promise.all(
         res.results.map((pokemon) => {
           let pokemonRecord = getPokemon(pokemon.url);
@@ -69,14 +104,27 @@ const Pokedex = () => {
         })
       );
       let initialData = _pokemonData[0];
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       setPokemonsData(_pokemonData);
       setFeaturedPokemon(initialData);
+      if (!res.previous) {
+        setPreviousUrl(res.previous);
+      }
       setNextUrl(res.next);
+      setPreLoad(false);
       setLoading(false);
+
+      if (scrollableDiv) {
+        scrollableDiv.scrollTop = 0;
+      }
       getJapaneseName();
-    };
-    fetchPokemonData();
-  }, []);
+    },
+    [scrollableDiv]
+  );
+
+  useEffect(() => {
+    fetchPokemonData(initialURL);
+  }, [fetchPokemonData]);
 
   // const handlePrevPage = async () => {
   //   if (previousUrl === null) {
@@ -90,56 +138,65 @@ const Pokedex = () => {
   //   setLoading(false);
   // };
 
-  // const handleNextPage = async () => {
-  //   setLoading(true);
-  //   let data = await getAllPokemon(nextUrl);
-  //   await loadPokemon(data.results);
-  //   setNextUrl(data.next);
-  //   setPreviousUrl(data.previous);
-  //   setLoading(false);
-  // };
-
   const toggleFeaturedPokemon = (index) => {
-    setFeaturedIndex(index);
-    setFeaturedPokemon(pokemonsData[index - 1]);
+    setFeaturedPokemon(pokemonsData[index]);
   };
 
   const toggleSidebar = () => {
     setIsDefault((prev) => !prev);
   };
 
+  const handleScroll = () => {
+    const scrollHeight = scrollableDiv.scrollHeight;
+    const scrollTop = scrollableDiv.scrollTop;
+    const clientHeight = scrollableDiv.clientHeight;
+    if (scrollHeight - scrollTop === clientHeight) {
+      fetchPokemonData(nextUrl);
+    }
+  };
+
   return (
     <>
-      {loading ? (
-        <div className="pokemonCardContainer">
-          {[...Array(20)].map((_, index) => (
-            <Skeleton key={index} className="skeleton-card" />
-          ))}
-        </div>
+      {preLoad ? (
+        <StyledMainWrapper>
+          <div>
+            {[...Array(20)].map((_, index) => (
+              <Skeleton key={index} className="skeleton-card" />
+            ))}
+          </div>
+          <StyledLoadingOverlay>
+            <StyledLoader></StyledLoader>
+          </StyledLoadingOverlay>
+        </StyledMainWrapper>
       ) : (
-        <div style={styles}>
-          <StyledImageContainer type1={typeColor1}>
+        <StyledMainWrapper>
+          {loading && (
+            <StyledLoadingOverlay>
+              <StyledLoader></StyledLoader>
+            </StyledLoadingOverlay>
+          )}
+          <StyledImageContainer type1={color1}>
             <Pokemon pokemon={featuredPokemon} />
-            {/* <HoverExample /> */}
           </StyledImageContainer>
-          <StyledSidebar type2={typeColor2}>
+          <StyledSidebar
+            type2={color2}
+            ref={(div) => setScrollableDiv(div)}
+            onScroll={handleScroll}
+          >
             {isDefault ? (
-              <ul>
-                {pokemonsData.map((pokemonData) => {
+              <StyledListContainer>
+                {pokemonsData.map((pokemonData, index) => {
                   return (
-                    <PokemonListMemo
+                    <PokemonList
                       key={pokemonData.id}
                       pokemonData={pokemonData}
-                      isFeatured={pokemonData.id === featuredIndex}
-                      onMouseEnter={toggleFeaturedPokemon.bind(
-                        null,
-                        pokemonData.id
-                      )}
+                      isFeatured={pokemonData.id === featuredPokemon.id}
+                      onMouseEnter={toggleFeaturedPokemon.bind(null, index)}
                       onClick={toggleSidebar}
                     />
                   );
                 })}
-              </ul>
+              </StyledListContainer>
             ) : (
               <StyledInfoContainer>
                 <PokeInfo
@@ -149,7 +206,7 @@ const Pokedex = () => {
               </StyledInfoContainer>
             )}
           </StyledSidebar>
-        </div>
+        </StyledMainWrapper>
       )}
     </>
   );

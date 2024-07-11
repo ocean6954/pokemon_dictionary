@@ -1,9 +1,3 @@
-import {
-  getJapaneseName,
-  getJapaneseType,
-  getTypeColor,
-} from "../../api/pokemonAPI";
-import { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 
 const addShadow = keyframes`
@@ -77,14 +71,6 @@ const StyledCardBack = styled.div`
   }
 `;
 
-const StyledCardName = styled.div`
-  padding: 0;
-  font-size: 24px;
-  margin-top: 14px;
-`;
-
-const StyledCardInfo = styled.div``;
-
 const StyledImage = styled.div`
   width: 100%;
   height: 100%;
@@ -92,43 +78,10 @@ const StyledImage = styled.div`
 `;
 
 export const Pokemon = ({ pokemon }) => {
-  // console.log("pokemon is", pokemon);
-  const [japaneseName, setJapaneseName] = useState("");
-  const [twoTypeColor, setTwoTypeColor] = useState({
-    type1: "",
-    type2: "",
-  });
-
-  useEffect(() => {
-    const fetchJapaneseName = async () => {
-      const name = await getJapaneseName(pokemon.name);
-      setJapaneseName(name);
-    };
-    fetchJapaneseName();
-  }, [pokemon.name]);
-
-  useEffect(() => {
-    const type1 = getTypeColor(pokemon.types[0].type.name);
-    const type2 = pokemon.types[1]
-      ? getTypeColor(pokemon.types[1].type.name)
-      : type1;
-    const newTypes = {
-      type1,
-      type2,
-    };
-    setTwoTypeColor(newTypes);
-  }, [pokemon]);
-
   return (
     <>
-      {/* {pokemonData.map((pokemon) => {
-            return <Card key={pokemon.name} pokemon={pokemon}></Card>;
-          })} */}
       <StyledCard>
-        <StyledCardBack
-          type1={twoTypeColor.type1}
-          type2={twoTypeColor.type2}
-        ></StyledCardBack>
+        <StyledCardBack></StyledCardBack>
         <StyledImage>
           <img
             src={pokemon.sprites.front_default}
@@ -137,33 +90,6 @@ export const Pokemon = ({ pokemon }) => {
             height="400px"
           />
         </StyledImage>
-        {/* <div className="仮置き場">
-          <StyledCardName>{japaneseName}</StyledCardName>
-          <div className="cardType">
-            <div>タイプ</div>
-            {pokemon.types.map((type) => {
-              const { japanese_name } = getJapaneseType(type);
-              return (
-                <span key={pokemon.name + type.type.name}>{japanese_name}</span>
-              );
-            })}
-          </div>
-          <div className="carInfo">
-            <div className="cardData">
-              <p className="title">
-                重さ: {(pokemon.weight / 10).toFixed(1)}kg
-              </p>
-            </div>
-            <div className="cardData">
-              <p className="title">高さ: {(pokemon.height / 10).toFixed(1)}m</p>
-            </div>
-            <div className="cardData">
-              <p className="title">
-                アビリティ: {pokemon.abilities[0].ability.name}
-              </p>
-            </div>
-          </div>
-        </div> */}
       </StyledCard>
     </>
   );
