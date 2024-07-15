@@ -15,7 +15,7 @@ const StyledCard = styled.div`
   height: var(--card-height);
   border-radius: 10px;
   position: relative;
-  animation: ${addShadow} 2s linear forwards;
+  /* animation: ${addShadow} 2s linear forwards; */
   margin: 0 auto;
 `;
 
@@ -74,7 +74,6 @@ const StyledCardBack = styled.div`
 const StyledImage = styled.div`
   width: 100%;
   height: 100%;
-  /* background-color: red; */
 `;
 
 export const Pokemon = ({ pokemon }) => {

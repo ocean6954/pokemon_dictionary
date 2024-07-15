@@ -12,6 +12,7 @@ import PokemonList from "./Card/PokemonList";
 import PokeInfo from "./Card/PokeInfo";
 import styled, { keyframes } from "styled-components";
 import { Pokemon } from "./Card/Pokemon";
+import { MonsterBall_b } from "../images/monster_ball_b.svg";
 
 const StyledMainWrapper = styled.div`
   text-align: center;
@@ -59,17 +60,44 @@ const StyledLoadingOverlay = styled.div`
 `;
 
 const spin = keyframes` 
-  0% {transform: rotate(0deg);}
-  100% { transform: rotate(360deg);}
+    0% {
+    transform: rotate(0deg) translateX(40px) rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg) translateX(40px) rotate(-360deg);
+  }
 `;
 
-const StyledLoader = styled.div`
-  border: 4px solid rgba(0, 0, 0, 0.6);
-  border-left: 4px solid #3498db;
-  border-radius: 50%;
+const swing = keyframes`
+  0% {
+    transform: rotate(0deg);
+  }
+  20% {
+    transform: rotate(30deg);
+  }
+  40% {
+    transform: rotate(0deg);
+  }
+  60% {
+    transform: rotate(-30deg);
+  }
+  80% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+`;
+
+const StyledLoaderImage = styled.img`
   width: 50px;
   height: 50px;
-  animation: ${spin} 1s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transform-origin: center bottom;
+  animation: ${swing} 0.7s infinite linear;
 `;
 
 const Pokedex = () => {
@@ -165,14 +193,17 @@ const Pokedex = () => {
             ))}
           </div>
           <StyledLoadingOverlay>
-            <StyledLoader></StyledLoader>
+            <StyledLoaderImage></StyledLoaderImage>
           </StyledLoadingOverlay>
         </StyledMainWrapper>
       ) : (
         <StyledMainWrapper>
           {loading && (
             <StyledLoadingOverlay>
-              <StyledLoader></StyledLoader>
+              <StyledLoaderImage
+                src={`${process.env.PUBLIC_URL}/monster_ball_w.svg`}
+                alt="モンスターボール画像"
+              ></StyledLoaderImage>
             </StyledLoadingOverlay>
           )}
           <StyledImageContainer type1={color1}>
@@ -193,6 +224,7 @@ const Pokedex = () => {
                       isFeatured={pokemonData.id === featuredPokemon.id}
                       onMouseEnter={toggleFeaturedPokemon.bind(null, index)}
                       onClick={toggleSidebar}
+                      colors={{ color1, color2 }}
                     />
                   );
                 })}

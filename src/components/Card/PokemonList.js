@@ -11,13 +11,15 @@ const Styledlist = styled.li`
   height: 50px;
   width: 60%;
   margin: 20px auto;
-  /* padding: 5%; */
-  /* background-color: ; */
   border-radius: 45px;
   ${({ isSelected }) => isSelected && `background: white;`};
+  position: relative;
 
   & p {
     line-height: 50px;
+  }
+  & p:nth-of-type(1) {
+    margin-left: 60px;
   }
 
   &.featured {
@@ -27,6 +29,13 @@ const Styledlist = styled.li`
       color: white;
     }
   }
+`;
+
+const StyledImg = styled.img`
+  position: absolute;
+  display: inline-block;
+  top: 00%;
+  left: 0;
 `;
 
 const PokemonList = ({ pokemonData, isFeatured, onMouseEnter, onClick }) => {
@@ -52,6 +61,11 @@ const PokemonList = ({ pokemonData, isFeatured, onMouseEnter, onClick }) => {
         className={isFeatured ? "featured" : ""}
         onClick={onClick}
       >
+        <StyledImg
+          src={pokemonData.sprites.front_default}
+          alt="ポケモン画像"
+          height="50px"
+        ></StyledImg>
         <p>No.{formatNumberToThreeDigits(pokemonData.id)}</p>
         <p>{japaneseName}</p>
         {isFeatured ? (
