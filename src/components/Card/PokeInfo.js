@@ -6,12 +6,15 @@ import {
 } from "../../api/pokemonAPI";
 import { FaArrowsRotate } from "react-icons/fa6";
 import { styled } from "styled-components";
+import { IconContext } from "react-icons";
+import { VscTriangleUp } from "react-icons/vsc";
+import { VscTriangleDown } from "react-icons/vsc";
 
 const StyledInfoContainer = styled.div`
   background-color: red;
   width: 90%;
   margin: 0 auto;
-  height: 90%;
+  height: 550px;
 `;
 
 const StyledInfoNav = styled.div`
@@ -21,28 +24,40 @@ const StyledInfoNav = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+`;
+
+const StyledArrowUp = styled.div`
+  position: absolute;
+  top: 0;
+  transform: translateY(-80%);
+`;
+
+const StyledArrowDown = styled.div`
+  position: absolute;
+  bottom: 0;
+  transform: translateY(90%);
 `;
 
 const StyledInformation = styled.div`
   margin: 0 auto;
-  height: 85%;
+  height: 450px;
   width: 90%;
 `;
 
 const StyledInfoHead = styled.div`
   display: flex;
   background-color: green;
-
   justify-content: center;
   align-items: center;
-  height: 10%;
+  height: 50px;
 `;
 
 const StyledTable = styled.table`
   background-color: orange;
   width: 100%;
-  margin: 2% 0;
-  height: 46%;
+  margin: 10px 0;
+  height: 200px;
 
   & th {
     background-color: aqua;
@@ -56,8 +71,12 @@ const StyledDescription = styled.p`
   font-style: normal;
   font-size: 28px;
   width: 85%;
-  height: 37%;
+  height: 180px;
   background-color: purple;
+
+  & span {
+    display: inline-block;
+  }
 `;
 
 const StyledButton = styled.button`
@@ -89,8 +108,8 @@ const PokeInfo = ({ featuredPokemon, onClick }) => {
   };
 
   const SplitByFullWidthSpace = (text) => {
-    // 全角スペースで文字列を分割
-    const parts = text.split(/(　)/);
+    const modifiedText = text.replace(/\n/g, "　");
+    const parts = modifiedText.split(/(?=　)/g);
     return (
       <div>
         {parts.map((part, index) => (
@@ -99,11 +118,26 @@ const PokeInfo = ({ featuredPokemon, onClick }) => {
       </div>
     );
   };
+
   return (
     <>
       <StyledInfoContainer>
         <StyledInfoNav>
+          <IconContext.Provider
+            value={{ color: "var(--white)", size: "2.0rem" }}
+          >
+            <StyledArrowUp>
+              <VscTriangleUp />
+            </StyledArrowUp>
+          </IconContext.Provider>
           <div>{japaneseName}</div>
+          <IconContext.Provider
+            value={{ color: "var(--white)", size: "2.0rem" }}
+          >
+            <StyledArrowDown>
+              <VscTriangleDown />
+            </StyledArrowDown>
+          </IconContext.Provider>
         </StyledInfoNav>
         <StyledInformation>
           <StyledInfoHead>
@@ -138,6 +172,7 @@ const PokeInfo = ({ featuredPokemon, onClick }) => {
           {descriptions.length > 0 && (
             <StyledDescription>
               {SplitByFullWidthSpace(descriptions[desIndex].flavor_text)}
+              {/* {console.log(descriptions[desIndex].flavor_text.includes("\n"))} */}
               {/* {descriptions[desIndex].flavor_text} */}
             </StyledDescription>
           )}
