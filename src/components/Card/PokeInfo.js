@@ -25,18 +25,65 @@ const StyledInfoNav = styled.div`
   justify-content: center;
   align-items: center;
   position: relative;
+  overflow: hidden;
+`;
+
+const StyledNavLeft = styled.div`
+  width: 40%;
+  background-color: #f2501e;
+  display: flex;
+  align-items: center;
+  transform-origin: top left;
+  transform: skew(-30deg) scaleX(1.1);
+
+  & img,
+  p {
+    transform: skew(28deg) scaleX(1);
+  }
+
+  & img {
+    margin-left: 10%;
+  }
+
+  & p {
+    color: var(--white);
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1;
+  }
+`;
+
+const StyledNavRight = styled.div`
+  width: 60%;
+  height: 100%;
+  background-color: var(--black);
+  display: flex;
+  align-items: center;
+  transform-origin: bottom right;
+  transform: skew(-30deg) scaleX(1.1);
+
+  & p {
+    color: var(--white);
+    font-size: 30px;
+    line-height: 1;
+    transform: skew(25deg) scaleX(1);
+    margin-left: 5%;
+    font-weight: 600;
+  }
+`;
+const StyledNavIcon = styled.div`
+  position: fixed;
+  z-index: 10;
 `;
 
 const StyledArrowUp = styled.div`
-  position: absolute;
   top: 0;
-  transform: translateY(-80%);
+  transform: translateY(-60%);
 `;
 
 const StyledArrowDown = styled.div`
-  position: absolute;
   bottom: 0;
-  transform: translateY(90%);
+  transform: translateY(70%);
 `;
 
 const StyledInformation = styled.div`
@@ -73,6 +120,7 @@ const StyledDescription = styled.p`
   width: 85%;
   height: 180px;
   background-color: purple;
+  text-align: left;
 
   & span {
     display: inline-block;
@@ -85,7 +133,14 @@ const StyledButton = styled.button`
   bottom: -10;
 `;
 
-const PokeInfo = ({ featuredPokemon, onClick }) => {
+const StyledImg = styled.img`
+  /* position: absolute; */
+  /* display: inline-block; */
+  /* top: 00%; */
+  /* left: 0; */
+`;
+
+const PokeInfo = ({ featuredPokemon, onClick, toggleNext, togglePrev }) => {
   const [japaneseName, setJapaneseName] = useState("");
   const [descriptions, setDescriptions] = useState([]);
   const [desIndex, setDesIndex] = useState(0);
@@ -109,7 +164,7 @@ const PokeInfo = ({ featuredPokemon, onClick }) => {
 
   const SplitByFullWidthSpace = (text) => {
     const modifiedText = text.replace(/\n/g, "　");
-    const parts = modifiedText.split(/(?=　)/g);
+    const parts = modifiedText.split(/(?<=　)/g);
     return (
       <div>
         {parts.map((part, index) => (
@@ -123,21 +178,42 @@ const PokeInfo = ({ featuredPokemon, onClick }) => {
     <>
       <StyledInfoContainer>
         <StyledInfoNav>
-          <IconContext.Provider
-            value={{ color: "var(--white)", size: "2.0rem" }}
-          >
-            <StyledArrowUp>
-              <VscTriangleUp />
-            </StyledArrowUp>
-          </IconContext.Provider>
-          <div>{japaneseName}</div>
-          <IconContext.Provider
-            value={{ color: "var(--white)", size: "2.0rem" }}
-          >
-            <StyledArrowDown>
-              <VscTriangleDown />
-            </StyledArrowDown>
-          </IconContext.Provider>
+          <StyledNavIcon>
+            <IconContext.Provider
+              value={{ color: "var(--white)", size: "2.0rem" }}
+            >
+              <StyledArrowUp
+                onClick={() => {
+                  togglePrev(featuredPokemon.id - 1);
+                }}
+              >
+                <VscTriangleUp />
+              </StyledArrowUp>
+            </IconContext.Provider>
+
+            <IconContext.Provider
+              value={{ color: "var(--white)", size: "2.0rem" }}
+            >
+              <StyledArrowDown
+                onClick={() => {
+                  toggleNext(featuredPokemon.id);
+                }}
+              >
+                <VscTriangleDown />
+              </StyledArrowDown>
+            </IconContext.Provider>
+          </StyledNavIcon>
+          <StyledNavLeft>
+            <StyledImg
+              src={featuredPokemon.sprites.front_default}
+              alt="ポケモン画像"
+              height="80px"
+            ></StyledImg>
+            <p>No.{featuredPokemon.id.toString().padStart(3, "0")}</p>
+          </StyledNavLeft>
+          <StyledNavRight>
+            <p>{japaneseName}</p>
+          </StyledNavRight>
         </StyledInfoNav>
         <StyledInformation>
           <StyledInfoHead>

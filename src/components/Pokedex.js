@@ -105,7 +105,6 @@ const Pokedex = () => {
   const [loading, setLoading] = useState(false);
   const [preLoad, setPreLoad] = useState(true);
   const [pokemonsData, setPokemonsData] = useState([]);
-
   const [nextUrl, setNextUrl] = useState("");
   const [previousUrl, setPreviousUrl] = useState("");
   const [featuredPokemon, setFeaturedPokemon] = useState({});
@@ -132,12 +131,12 @@ const Pokedex = () => {
         })
       );
       let initialData = _pokemonData[0];
-      await new Promise((resolve) => setTimeout(resolve, 1000));
       setPokemonsData(_pokemonData);
       setFeaturedPokemon(initialData);
       if (!res.previous) {
         setPreviousUrl(res.previous);
       }
+
       setNextUrl(res.next);
       setPreLoad(false);
       setLoading(false);
@@ -154,18 +153,6 @@ const Pokedex = () => {
     fetchPokemonData(initialURL);
   }, [fetchPokemonData]);
 
-  // const handlePrevPage = async () => {
-  //   if (previousUrl === null) {
-  //     return;
-  //   }
-  //   setLoading(true);
-  //   let data = await getAllPokemon(previousUrl);
-  //   await loadPokemon(data.results);
-  //   setNextUrl(data.next);
-  //   setPreviousUrl(data.previous);
-  //   setLoading(false);
-  // };
-
   const toggleFeaturedPokemon = (index) => {
     setFeaturedPokemon(pokemonsData[index]);
   };
@@ -181,6 +168,24 @@ const Pokedex = () => {
     if (scrollHeight - scrollTop === clientHeight) {
       fetchPokemonData(nextUrl);
     }
+  };
+
+  const toggleNextPokemon = (id = 1) => {
+    const index = id % 10;
+    console.log("index is", index);
+
+    if (id % 20 === 0) {
+      fetchPokemonData(nextUrl);
+    }
+    setFeaturedPokemon(pokemonsData[index]);
+  };
+
+  const togglePrevPokemon = (id = 1) => {
+    if (id === 0) {
+      return;
+    }
+    const index = 10 <= id <= 20 ? id : id % 10;
+    setFeaturedPokemon(pokemonsData[index - 1]);
   };
 
   return (
@@ -221,6 +226,7 @@ const Pokedex = () => {
                     <PokemonList
                       key={pokemonData.id}
                       pokemonData={pokemonData}
+                      id={pokemonData.id}
                       isFeatured={pokemonData.id === featuredPokemon.id}
                       onMouseEnter={toggleFeaturedPokemon.bind(null, index)}
                       onClick={toggleSidebar}
@@ -234,6 +240,8 @@ const Pokedex = () => {
                 <PokeInfo
                   featuredPokemon={featuredPokemon}
                   onClick={toggleSidebar}
+                  toggleNext={toggleNextPokemon}
+                  togglePrev={togglePrevPokemon}
                 />
               </StyledInfoContainer>
             )}

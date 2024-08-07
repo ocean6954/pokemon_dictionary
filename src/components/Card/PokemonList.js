@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { getJapaneseName, getPokemonDescription } from "../../api/pokemonAPI";
 import styled from "styled-components";
-import { MonsterBall_b } from "../../images/monster_ball_b.svg";
-import { MonsterBall_w } from "../../images/monster_ball_w.svg";
+// import { MonsterBall_b } from "../../images/monster_ball_b.svg";
+// import { MonsterBall_w } from "../../images/monster_ball_w.svg";
 
 const Styledlist = styled.li`
   display: flex;
@@ -38,7 +38,13 @@ const StyledImg = styled.img`
   left: 0;
 `;
 
-const PokemonList = ({ pokemonData, isFeatured, onMouseEnter, onClick }) => {
+const PokemonList = ({
+  pokemonData,
+  id,
+  isFeatured,
+  onMouseEnter,
+  onClick,
+}) => {
   const [japaneseName, setJapaneseName] = useState("");
   useEffect(() => {
     const fetchJapaneseName = async () => {
