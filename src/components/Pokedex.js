@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import {
   getAllPokemon,
   getPokemon,
@@ -108,6 +108,7 @@ const Pokedex = () => {
   const [nextUrl, setNextUrl] = useState("");
   const [previousUrl, setPreviousUrl] = useState("");
   const [featuredPokemon, setFeaturedPokemon] = useState({});
+  const adjustmentRef = useRef(0);
   let color1;
   let color2;
   if (featuredPokemon && Object.keys(featuredPokemon).length > 0) {
@@ -171,21 +172,27 @@ const Pokedex = () => {
   };
 
   const toggleNextPokemon = (id = 1) => {
-    const index = id % 10;
-    console.log("index is", index);
-
-    if (id % 20 === 0) {
-      fetchPokemonData(nextUrl);
+    if (id < 20) {
+      setFeaturedPokemon(pokemonsData[id]);
+    } else {
+      if (id % 20 === 0) {
+        fetchPokemonData(nextUrl);
+        adjustmentRef.current = id;
+      }
+      setFeaturedPokemon(pokemonsData[id - adjustmentRef.current]);
     }
-    setFeaturedPokemon(pokemonsData[index]);
+    console.log(`渡ってきたidは:${id}`);
+    console.log(`adjustmentRefは:${adjustmentRef.current}`);
+    console.log(`indexは:${id - adjustmentRef.current}`);
+    console.log(`    `);
   };
 
   const togglePrevPokemon = (id = 1) => {
     if (id === 0) {
       return;
     }
-    const index = 10 <= id <= 20 ? id : id % 10;
-    setFeaturedPokemon(pokemonsData[index - 1]);
+
+    setFeaturedPokemon(pokemonsData[id - 1]);
   };
 
   return (
