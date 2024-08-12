@@ -28,4 +28,7 @@ code {
   --card-height: 400px;
   --white: #fdfdfd;
   --black: #181818;
+  --pokemon-red: #ec533a;
+  --pokemon-white: #f5f5f5;
+  --pokemon-black: #333;
 }

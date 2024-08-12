@@ -4,15 +4,15 @@ import {
   getPokemon,
   getJapaneseName,
   getTypeColor,
+  MonsterBall,
 } from "../api/pokemonAPI";
 import Skeleton from "react-loading-skeleton";
 import "./css/pokedex.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import PokemonList from "./Card/PokemonList";
 import PokeInfo from "./Card/PokeInfo";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { Pokemon } from "./Card/Pokemon";
-import { MonsterBall_b } from "../images/monster_ball_b.svg";
 
 const StyledMainWrapper = styled.div`
   text-align: center;
@@ -57,47 +57,6 @@ const StyledLoadingOverlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const spin = keyframes` 
-    0% {
-    transform: rotate(0deg) translateX(40px) rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg) translateX(40px) rotate(-360deg);
-  }
-`;
-
-const swing = keyframes`
-  0% {
-    transform: rotate(0deg);
-  }
-  20% {
-    transform: rotate(30deg);
-  }
-  40% {
-    transform: rotate(0deg);
-  }
-  60% {
-    transform: rotate(-30deg);
-  }
-  80% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(0deg);
-  }
-`;
-
-const StyledLoaderImage = styled.img`
-  width: 50px;
-  height: 50px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  transform-origin: center bottom;
-  animation: ${swing} 0.7s infinite linear;
 `;
 
 const Pokedex = () => {
@@ -205,17 +164,14 @@ const Pokedex = () => {
             ))}
           </div>
           <StyledLoadingOverlay>
-            <StyledLoaderImage></StyledLoaderImage>
+            <MonsterBall />
           </StyledLoadingOverlay>
         </StyledMainWrapper>
       ) : (
         <StyledMainWrapper>
           {loading && (
             <StyledLoadingOverlay>
-              <StyledLoaderImage
-                src={`${process.env.PUBLIC_URL}/monster_ball_w.svg`}
-                alt="モンスターボール画像"
-              ></StyledLoaderImage>
+              <MonsterBall />
             </StyledLoadingOverlay>
           )}
           <StyledImageContainer type1={color1}>
