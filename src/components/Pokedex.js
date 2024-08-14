@@ -61,11 +61,11 @@ const StyledLoadingOverlay = styled.div`
 
 const Pokedex = () => {
   const initialURL = "https://pokeapi.co/api/v2/pokemon";
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [preLoad, setPreLoad] = useState(true);
   const [pokemonsData, setPokemonsData] = useState([]);
   const [nextUrl, setNextUrl] = useState("");
-  const [previousUrl, setPreviousUrl] = useState("");
+  const [prevUrl, setPrevUrl] = useState("");
   const [featuredPokemon, setFeaturedPokemon] = useState({});
   const adjustmentRef = useRef(0);
   let color1;
@@ -82,29 +82,37 @@ const Pokedex = () => {
 
   const fetchPokemonData = useCallback(
     async (url) => {
-      setLoading(true);
-      let res = await getAllPokemon(url);
-      let _pokemonData = await Promise.all(
-        res.results.map((pokemon) => {
-          let pokemonRecord = getPokemon(pokemon.url);
-          return pokemonRecord;
-        })
-      );
-      let initialData = _pokemonData[0];
-      setPokemonsData(_pokemonData);
-      setFeaturedPokemon(initialData);
-      if (!res.previous) {
-        setPreviousUrl(res.previous);
-      }
+      try {
+        setLoading(true);
 
-      setNextUrl(res.next);
-      setPreLoad(false);
-      setLoading(false);
+        // 1秒の遅延を追加
+        await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      if (scrollableDiv) {
-        scrollableDiv.scrollTop = 0;
+        let res = await getAllPokemon(url);
+        let _pokemonData = await Promise.all(
+          res.results.map((pokemon) => {
+            let pokemonRecord = getPokemon(pokemon.url);
+            return pokemonRecord;
+          })
+        );
+        let initialData = _pokemonData[0];
+        setPokemonsData(_pokemonData);
+        setFeaturedPokemon(initialData);
+
+        setPrevUrl(res.previous || null);
+        setNextUrl(res.next || null);
+        setPreLoad(false);
+        setLoading(false);
+
+        if (scrollableDiv) {
+          scrollableDiv.scrollTop = 1;
+        }
+
+        getJapaneseName();
+      } catch (error) {
+        console.error("Error fetching Pokemon data:", error);
+        setLoading(false);
       }
-      getJapaneseName();
     },
     [scrollableDiv]
   );
@@ -127,6 +135,9 @@ const Pokedex = () => {
     const clientHeight = scrollableDiv.clientHeight;
     if (scrollHeight - scrollTop === clientHeight) {
       fetchPokemonData(nextUrl);
+    }
+    if (scrollTop === 0 && prevUrl) {
+      fetchPokemonData(prevUrl);
     }
   };
 

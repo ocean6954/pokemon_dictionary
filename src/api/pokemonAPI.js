@@ -87,15 +87,6 @@ export const getPokemon = (url) => {
   });
 };
 
-// const spin = keyframes`
-//     0% {
-//     transform: rotate(0deg) translateX(40px) rotate(0deg);
-//   }
-//   100% {
-//     transform: rotate(360deg) translateX(40px) rotate(-360deg);
-//   }
-// `;
-
 const swing = keyframes`
   0% {
     transform: rotate(0deg);
