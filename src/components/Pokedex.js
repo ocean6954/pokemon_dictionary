@@ -7,6 +7,7 @@ import {
   MonsterBall,
 } from "../api/pokemonAPI";
 import Skeleton from "react-loading-skeleton";
+import { useDebounce } from "use-debounce";
 import "./css/pokedex.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import PokemonList from "./Card/PokemonList";
@@ -78,7 +79,9 @@ const Pokedex = () => {
     }
   }
   const [isDefault, setIsDefault] = useState(true);
+
   const [scrollableDiv, setScrollableDiv] = useState(null);
+  const [debouncedScrollableDiv] = useDebounce(scrollableDiv, 500);
 
   const fetchPokemonData = useCallback(
     async (url) => {
@@ -86,7 +89,7 @@ const Pokedex = () => {
         setLoading(true);
 
         // 1秒の遅延を追加
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        // await new Promise((resolve) => setTimeout(resolve, 500));
 
         let res = await getAllPokemon(url);
         let _pokemonData = await Promise.all(
@@ -104,8 +107,8 @@ const Pokedex = () => {
         setPreLoad(false);
         setLoading(false);
 
-        if (scrollableDiv) {
-          scrollableDiv.scrollTop = 1;
+        if (debouncedScrollableDiv) {
+          debouncedScrollableDiv.scrollTop = 1;
         }
 
         getJapaneseName();
@@ -114,7 +117,7 @@ const Pokedex = () => {
         setLoading(false);
       }
     },
-    [scrollableDiv]
+    [debouncedScrollableDiv]
   );
 
   useEffect(() => {
@@ -139,6 +142,7 @@ const Pokedex = () => {
     if (scrollTop === 0 && prevUrl) {
       fetchPokemonData(prevUrl);
     }
+    console.log("HandleScrollが呼び出されました！");
   };
 
   const toggleNextPokemon = (id = 1) => {
