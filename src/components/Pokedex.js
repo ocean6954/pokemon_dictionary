@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import {
   getAllPokemon,
-  getPokemon,
   getJapaneseName,
   getTypeColor,
   MonsterBall,
@@ -20,25 +19,35 @@ const StyledMainWrapper = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
+  /* background: linear-gradient(
+    120deg,
+    ${({ type1 }) => type1} 0%,
+    ${({ type1 }) => type1} 40%,
+    ${({ type2 }) => type2} 50%,
+    ${({ type2 }) => type2} 100%
+  ); */
 `;
 
 const StyledImageContainer = styled.div`
   width: 45%;
   background-color: ${({ type1 }) => type1};
-
   display: flex;
   align-items: center;
 `;
 const StyledSidebar = styled.div`
   width: 55%;
   height: 100vh;
-  background-color: ${({ type2 }) => type2};
-  overflow: auto;
+  /* background-color: ${({ type2 }) => type2}; */
+  background-color: blue;
+  /* padding: 2% 0; */
 `;
 
 const StyledListContainer = styled.ul`
   width: 100%;
-  height: 90%;
+  height: 85%;
+  margin: 5% 0;
+  background-color: red;
+  overflow: auto;
 `;
 
 const StyledInfoContainer = styled.div`
@@ -69,6 +78,9 @@ const Pokedex = () => {
   const [prevUrl, setPrevUrl] = useState("");
   const [featuredPokemon, setFeaturedPokemon] = useState({});
   const adjustmentRef = useRef(0);
+
+  console.log("今のpokemons: ", pokemonsData);
+
   let color1;
   let color2;
   if (featuredPokemon && Object.keys(featuredPokemon).length > 0) {
@@ -80,48 +92,35 @@ const Pokedex = () => {
   }
   const [isDefault, setIsDefault] = useState(true);
 
-  const [scrollableDiv, setScrollableDiv] = useState(null);
+  const [scrollableDiv, setScrollableDiv] = useState(
+    document.createElement("div")
+  );
   const [debouncedScrollableDiv] = useDebounce(scrollableDiv, 500);
 
-  const fetchPokemonData = useCallback(
-    async (url) => {
-      try {
-        setLoading(true);
-
-        // 1秒の遅延を追加
-        // await new Promise((resolve) => setTimeout(resolve, 500));
-
-        let res = await getAllPokemon(url);
-        let _pokemonData = await Promise.all(
-          res.results.map((pokemon) => {
-            let pokemonRecord = getPokemon(pokemon.url);
-            return pokemonRecord;
-          })
-        );
-        let initialData = _pokemonData[0];
-        setPokemonsData(_pokemonData);
-        setFeaturedPokemon(initialData);
-
-        setPrevUrl(res.previous || null);
-        setNextUrl(res.next || null);
-        setPreLoad(false);
-        setLoading(false);
-
-        if (debouncedScrollableDiv) {
-          debouncedScrollableDiv.scrollTop = 1;
-        }
-
-        getJapaneseName();
-      } catch (error) {
-        console.error("Error fetching Pokemon data:", error);
-        setLoading(false);
-      }
-    },
-    [debouncedScrollableDiv]
-  );
+  const fetchPokemonData = useCallback(async (url = initialURL) => {
+    try {
+      console.log("fetchPokemonDataが呼び出されました!");
+      setLoading(true);
+      let res = await getAllPokemon(url);
+      let initialData = res.pokemons[0];
+      setPokemonsData(res.pokemons);
+      setFeaturedPokemon(initialData);
+      setPrevUrl(res.previous || null);
+      setNextUrl(res.next || null);
+      setPreLoad(false);
+      setLoading(false);
+      getJapaneseName();
+      // if (debouncedScrollableDiv) {
+      //   debouncedScrollableDiv.scrollTop = 3;
+      // }
+    } catch (error) {
+      console.error("Error fetching Pokemon data:", error);
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
-    fetchPokemonData(initialURL);
+    fetchPokemonData();
   }, [fetchPokemonData]);
 
   const toggleFeaturedPokemon = (index) => {
@@ -133,16 +132,22 @@ const Pokedex = () => {
   };
 
   const handleScroll = () => {
-    const scrollHeight = scrollableDiv.scrollHeight;
-    const scrollTop = scrollableDiv.scrollTop;
-    const clientHeight = scrollableDiv.clientHeight;
-    if (scrollHeight - scrollTop === clientHeight) {
+    const scrollHeight = debouncedScrollableDiv.scrollHeight;
+    const scrollTop = debouncedScrollableDiv.scrollTop;
+    const clientHeight = debouncedScrollableDiv.clientHeight;
+    if (scrollHeight - scrollTop <= clientHeight + 1) {
       fetchPokemonData(nextUrl);
+      // scrollableDiv.current.scrollTo({
+      //   top: 0, // スクロール位置を上部に設定
+      //   behavior: "smooth", // スムーズにスクロール
+      // });
+      if (debouncedScrollableDiv) {
+        debouncedScrollableDiv.scrollTop = 3;
+      }
     }
     if (scrollTop === 0 && prevUrl) {
       fetchPokemonData(prevUrl);
     }
-    console.log("HandleScrollが呼び出されました！");
   };
 
   const toggleNextPokemon = (id = 1) => {
@@ -158,14 +163,12 @@ const Pokedex = () => {
     console.log(`渡ってきたidは:${id}`);
     console.log(`adjustmentRefは:${adjustmentRef.current}`);
     console.log(`indexは:${id - adjustmentRef.current}`);
-    console.log(`    `);
   };
 
   const togglePrevPokemon = (id = 1) => {
     if (id === 0) {
       return;
     }
-
     setFeaturedPokemon(pokemonsData[id - 1]);
   };
 
@@ -192,13 +195,12 @@ const Pokedex = () => {
           <StyledImageContainer type1={color1}>
             <Pokemon pokemon={featuredPokemon} />
           </StyledImageContainer>
-          <StyledSidebar
-            type2={color2}
-            ref={(div) => setScrollableDiv(div)}
-            onScroll={handleScroll}
-          >
+          <StyledSidebar type2={color2}>
             {isDefault ? (
-              <StyledListContainer>
+              <StyledListContainer
+                ref={(div) => setScrollableDiv(div)}
+                onScroll={handleScroll}
+              >
                 {pokemonsData.map((pokemonData, index) => {
                   return (
                     <PokemonList

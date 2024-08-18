@@ -16,3 +16,7 @@
     ${(props) => props.type2}
   ); */
   /* transition: all, 0.3s; */
+
+
+   // 1秒の遅延を追加
+      // await new Promise((resolve) => setTimeout(resolve, 500));

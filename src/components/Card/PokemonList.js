@@ -8,18 +8,18 @@ const Styledlist = styled.li`
   display: flex;
   justify-content: space-between;
   text-align: center;
-  height: 50px;
+  height: 70px;
   width: 60%;
-  margin: 20px auto;
+  margin: 0px auto 20px auto;
   border-radius: 45px;
   ${({ isSelected }) => isSelected && `background: white;`};
   position: relative;
 
   & p {
-    line-height: 50px;
+    line-height: 70px;
   }
   & p:nth-of-type(1) {
-    margin-left: 60px;
+    margin-left: 80px;
   }
 
   &.featured {
@@ -34,7 +34,7 @@ const Styledlist = styled.li`
 const StyledImg = styled.img`
   position: absolute;
   display: inline-block;
-  top: 00%;
+  top: 0%;
   left: 0;
 `;
 
@@ -70,7 +70,7 @@ const PokemonList = ({
         <StyledImg
           src={pokemonData.sprites.front_default}
           alt="ポケモン画像"
-          height="50px"
+          height="70px"
         ></StyledImg>
         <p>No.{formatNumberToThreeDigits(pokemonData.id)}</p>
         <p>{japaneseName}</p>

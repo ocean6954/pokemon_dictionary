@@ -10,14 +10,24 @@ const gameTranslations = {
   "lets-go-pikachu": "ポケットモンスター Let's Go! ピカチュウ",
 };
 
-export const getAllPokemon = (url) => {
-  return new Promise((resolve) => {
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        resolve(data);
-      });
-  });
+export const getAllPokemon = async (url) => {
+  try {
+    let res = await fetch(url);
+    let data = await res.json();
+
+    let fetchedPokemonsData = await Promise.all(
+      data.results.map((pokemon) => getPokemon(pokemon.url))
+    );
+
+    return {
+      pokemons: fetchedPokemonsData,
+      next: data.next,
+      previous: data.previous,
+    };
+  } catch (error) {
+    console.error("ポケモンデータの取得中にエラーが発生しました:", error);
+    throw error; // エラーを呼び出し元に伝える
+  }
 };
 
 export const getJapaneseName = async (englishName) => {
@@ -78,7 +88,7 @@ export const getTypeColor = (name) => {
 };
 
 export const getPokemon = (url) => {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
