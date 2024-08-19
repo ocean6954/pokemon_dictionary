@@ -11,7 +11,7 @@ import "./css/pokedex.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import PokemonList from "./Card/PokemonList";
 import PokeInfo from "./Card/PokeInfo";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Pokemon } from "./Card/Pokemon";
 
 const StyledMainWrapper = styled.div`
@@ -28,25 +28,80 @@ const StyledMainWrapper = styled.div`
   ); */
 `;
 
+const ToRight = keyframes`
+  0% {transform: scaleX(0);}
+  100% {transform: scaleX(1);}
+`;
+
+const ToLeft = keyframes`
+ 0% {
+    left: 100%; /* 画面外、右側からスタート */
+  }
+  100% {
+    left: 0%; /* 画面内に移動 */
+  }
+`;
+
 const StyledImageContainer = styled.div`
   width: 45%;
-  background-color: ${({ type1 }) => type1};
   display: flex;
   align-items: center;
+  position: relative;
+  background-color: ${({ type1 }) => type1};
+  animation: ${ToRight} 1.5s linear forwards;
+  transform-origin: left center;
+
+  /* &::after {
+    content: "";
+    position: absolute;
+    background-color: ${({ type1 }) => type1};
+    top: 0;
+    right: 0;
+    border-top: 100vh solid red; /* 透明 */
+  /* transform: skew(-15deg) scale(1.5) translateX(-10); */
+  /* animation: ${ToLeft} 1.5s linear forwards; */
+  /* } */
 `;
 const StyledSidebar = styled.div`
   width: 55%;
   height: 100vh;
+  position: relative;
   /* background-color: ${({ type2 }) => type2}; */
-  background-color: blue;
-  /* padding: 2% 0; */
+  /* animation: ${ToLeft} 1.5s linear forwards;
+  transform-origin: right center; */
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateX(-100%);
+    border-top: 100vh solid ${({ type2 }) => type2};
+    border-left: 100px solid transparent;
+    border-right: 0px solid transparent;
+    border-bottom: 100px solid transparent;
+    animation: ${ToLeft} 1.5s linear forwards;
+    transform-origin: right center;
+  }
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background-color: ${({ type2 }) => type2};
+    animation: ${ToLeft} 1.5s linear forwards;
+    transform-origin: right center;
+  }
 `;
 
 const StyledListContainer = styled.ul`
   width: 100%;
   height: 85%;
   margin: 5% 0;
-  background-color: red;
+  /* background-color: red; */
   overflow: auto;
 `;
 
@@ -110,9 +165,6 @@ const Pokedex = () => {
       setPreLoad(false);
       setLoading(false);
       getJapaneseName();
-      // if (debouncedScrollableDiv) {
-      //   debouncedScrollableDiv.scrollTop = 3;
-      // }
     } catch (error) {
       console.error("Error fetching Pokemon data:", error);
       setLoading(false);
@@ -137,16 +189,13 @@ const Pokedex = () => {
     const clientHeight = debouncedScrollableDiv.clientHeight;
     if (scrollHeight - scrollTop <= clientHeight + 1) {
       fetchPokemonData(nextUrl);
-      // scrollableDiv.current.scrollTo({
-      //   top: 0, // スクロール位置を上部に設定
-      //   behavior: "smooth", // スムーズにスクロール
-      // });
       if (debouncedScrollableDiv) {
         debouncedScrollableDiv.scrollTop = 3;
       }
     }
     if (scrollTop === 0 && prevUrl) {
       fetchPokemonData(prevUrl);
+      //ここにスクロール位置調整のコード記載する
     }
   };
 
