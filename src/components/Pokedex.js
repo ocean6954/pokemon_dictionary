@@ -19,6 +19,7 @@ const StyledMainWrapper = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
+  justify-content: space-between;
   /* background: linear-gradient(
     120deg,
     ${({ type1 }) => type1} 0%,
@@ -29,8 +30,12 @@ const StyledMainWrapper = styled.div`
 `;
 
 const ToRight = keyframes`
-  0% {transform: scaleX(0);}
-  100% {transform: scaleX(1);}
+  0% {
+    right: 100%; /* 画面外、右側からスタート */
+  }
+  100% {
+    right: 0%; /* 画面内に移動 */
+  }
 `;
 
 const ToLeft = keyframes`
@@ -43,56 +48,69 @@ const ToLeft = keyframes`
 `;
 
 const StyledImageContainer = styled.div`
-  width: 45%;
+  width: 40%;
   display: flex;
   align-items: center;
   position: relative;
-  background-color: ${({ type1 }) => type1};
-  animation: ${ToRight} 1.5s linear forwards;
-  transform-origin: left center;
+  /* background-color: ${({ type1 }) => type1}; */
 
-  /* &::after {
+  &::before {
     content: "";
     position: absolute;
     background-color: ${({ type1 }) => type1};
     top: 0;
     right: 0;
-    border-top: 100vh solid red; /* 透明 */
-  /* transform: skew(-15deg) scale(1.5) translateX(-10); */
-  /* animation: ${ToLeft} 1.5s linear forwards; */
-  /* } */
-`;
-const StyledSidebar = styled.div`
-  width: 55%;
-  height: 100vh;
-  position: relative;
-  /* background-color: ${({ type2 }) => type2}; */
-  /* animation: ${ToLeft} 1.5s linear forwards;
-  transform-origin: right center; */
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    transform: translateX(-100%);
-    border-top: 100vh solid ${({ type2 }) => type2};
-    border-left: 100px solid transparent;
-    border-right: 0px solid transparent;
-    border-bottom: 100px solid transparent;
-    animation: ${ToLeft} 1.5s linear forwards;
-    transform-origin: right center;
+    width: 100%;
+    height: 100%;
+    z-index: -2;
+    animation: ${ToRight} 1s linear forwards;
   }
   &::after {
     content: "";
     position: absolute;
     top: 0;
+    right: 0;
+    z-index: -1;
+    transform: translateX(100%);
+    border-top: 100vh solid ${({ type1 }) => type1};
+    border-left: 0px solid transparent;
+    border-right: 240px solid transparent;
+    border-bottom: 100px solid transparent;
+    animation: ${ToRight} 1s linear forwards;
+    transform-origin: left center;
+  }
+`;
+const StyledSidebar = styled.div`
+  width: 50%;
+  height: 100vh;
+  position: relative;
+  float: right;
+  /* background-color: green; */
+
+  &::before {
+    content: "";
+    position: absolute;
+    bottom: 0;
     left: 0;
+    transform: translateX(-100%);
+    border-top: 100px solid transparent;
+    border-left: 240px solid transparent;
+    border-right: 0px solid transparent;
+    border-bottom: 100vh solid ${({ type2 }) => type2};
+    animation: ${ToLeft} 1s linear forwards;
+    transform-origin: right center;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
     z-index: -1;
     width: 100%;
     height: 100%;
     background-color: ${({ type2 }) => type2};
-    animation: ${ToLeft} 1.5s linear forwards;
+    animation: ${ToLeft} 1s linear forwards;
     transform-origin: right center;
   }
 `;
