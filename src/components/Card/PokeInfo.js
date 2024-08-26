@@ -144,6 +144,7 @@ const PokeInfo = ({ featuredPokemon, onClick, toggleNext, togglePrev }) => {
   const [japaneseName, setJapaneseName] = useState("");
   const [descriptions, setDescriptions] = useState([]);
   const [desIndex, setDesIndex] = useState(0);
+  console.log("PokeInfo の呼び出し");
 
   useEffect(() => {
     const fetchJapaneseName = async () => {

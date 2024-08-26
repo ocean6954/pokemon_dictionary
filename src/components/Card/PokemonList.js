@@ -78,11 +78,13 @@ const PokemonList = ({
           <img
             src={`${process.env.PUBLIC_URL}/monster_ball_w.svg`}
             alt="モンスターボール画像"
+            width="50px"
           ></img>
         ) : (
           <img
             src={`${process.env.PUBLIC_URL}/monster_ball_b.svg`}
             alt="モンスターボール画像"
+            width="50px"
           ></img>
         )}
       </Styledlist>

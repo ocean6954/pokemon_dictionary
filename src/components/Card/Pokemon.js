@@ -64,7 +64,7 @@ const StyledCardBack = styled.div`
   }
 
   &::after {
-    background-color: ${({ type2 }) => type2};
+    background-color: ${({ $type2 }) => $type2};
     transform: skewY(45deg);
     transform-origin: top right;
     animation: ${ToLeftBottom} 1.5s linear forwards;
@@ -78,19 +78,17 @@ const StyledImage = styled.div`
 
 export const Pokemon = ({ pokemon }) => {
   return (
-    <>
-      <StyledCard>
-        <StyledCardBack></StyledCardBack>
-        <StyledImage>
-          <img
-            src={pokemon.sprites.front_default}
-            alt="ポケモンのフロント画像"
-            // width="200px"
-            height="400px"
-          />
-        </StyledImage>
-      </StyledCard>
-    </>
+    <StyledCard>
+      <StyledCardBack></StyledCardBack>
+      <StyledImage>
+        <img
+          src={pokemon.sprites.front_default}
+          alt="ポケモンのフロント画像"
+          // width="200px"
+          height="400px"
+        />
+      </StyledImage>
+    </StyledCard>
   );
 };
 

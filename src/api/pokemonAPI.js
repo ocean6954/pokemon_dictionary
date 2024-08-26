@@ -174,4 +174,42 @@ export const MonsterBall = () => {
   );
 };
 
+// const MonoPokeball = styled.div`
+//   width: 50px;
+//   height: 50px;
+//   margin: auto 10px auto 0;
+//   border-radius: 50%;
+//   background: linear-gradient(
+//     var(--pokemon-black) 46%,
+//     transparent 46%,
+//     transparent 54%,
+//     var(--pokemon-black) 54%
+//   );
+//   display: grid;
+//   place-items: center;
+//   padding: 20px 0;
+// `;
+
+// const MonoPokeballCenter = styled(PokeballCenter)`
+//   border: 3px solid black;
+//   height: 30%;
+//   width: 30%;
+// `;
+// const MonoPokeballCenterButton = styled(PokeballCenterButton)`
+//   height: 10px;
+//   width: 10px;
+
+//   background-color: white;
+// `;
+
+// export const MonoMonsterBall = () => {
+//   return (
+//     <>
+//       <MonoPokeball>
+//         <MonoPokeballCenterButton></MonoPokeballCenterButton>
+//       </MonoPokeball>
+//     </>
+//   );
+// };
+
 export default getAllPokemon;
