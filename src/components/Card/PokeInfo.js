@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import {
-  getJapaneseName,
+  // getJapaneseName,
   getJapaneseType,
-  getPokemonDescription,
+  // getPokemonDescription,
+  getPokemonInfo,
 } from "../../api/pokemonAPI";
 import { FaArrowsRotate } from "react-icons/fa6";
 import { styled } from "styled-components";
@@ -106,6 +107,16 @@ const StyledTable = styled.table`
   margin: 10px 0;
   height: 200px;
 
+  & tbody {
+    width: 100%;
+  }
+
+  & tr {
+    display: flex;
+    justify-content: stretch;
+    align-items: center;
+  }
+
   & th {
     background-color: aqua;
     width: 45%;
@@ -141,22 +152,27 @@ const StyledImg = styled.img`
 `;
 
 const PokeInfo = ({ featuredPokemon, onClick, toggleNext, togglePrev }) => {
-  const [japaneseName, setJapaneseName] = useState("");
-  const [descriptions, setDescriptions] = useState([]);
+  // const [japaneseName, setJapaneseName] = useState("");
+  // const [descriptions, setDescriptions] = useState([]);
   const [desIndex, setDesIndex] = useState(0);
-  console.log("PokeInfo の呼び出し");
+  const [pokeInfo, setPokeInfo] = useState({});
 
   useEffect(() => {
-    const fetchJapaneseName = async () => {
-      const name = await getJapaneseName(featuredPokemon.name);
-      setJapaneseName(name);
+    // const fetchJapaneseName = async () => {
+    //   const name = await getJapaneseName(featuredPokemon.name);
+    //   setJapaneseName(name);
+    // };
+    // const fetchPokemonDescriptions = async () => {
+    //   const des = await getPokemonDescription(featuredPokemon.id);
+    //   setDescriptions(des);
+    // };
+    // fetchJapaneseName();
+    // fetchPokemonDescriptions();
+    const fetchPokemonInfo = async () => {
+      const res = await getPokemonInfo(featuredPokemon.name);
+      setPokeInfo(res);
     };
-    const fetchPokemonDescriptions = async () => {
-      const des = await getPokemonDescription(featuredPokemon.id);
-      setDescriptions(des);
-    };
-    fetchJapaneseName();
-    fetchPokemonDescriptions();
+    fetchPokemonInfo();
   }, [featuredPokemon]);
 
   const toggleDescriptions = (index) => {
@@ -213,12 +229,12 @@ const PokeInfo = ({ featuredPokemon, onClick, toggleNext, togglePrev }) => {
             <p>No.{featuredPokemon.id.toString().padStart(3, "0")}</p>
           </StyledNavLeft>
           <StyledNavRight>
-            <p>{japaneseName}</p>
+            <p>{pokeInfo.name}</p>
           </StyledNavRight>
         </StyledInfoNav>
         <StyledInformation>
           <StyledInfoHead>
-            <p>〇〇ポケモン</p>
+            <p>{pokeInfo.genus}</p>
           </StyledInfoHead>
           <StyledTable>
             <tbody>
@@ -246,22 +262,26 @@ const PokeInfo = ({ featuredPokemon, onClick, toggleNext, togglePrev }) => {
               </tr> */}
             </tbody>
           </StyledTable>
-          {descriptions.length > 0 && (
-            <StyledDescription>
-              {SplitByFullWidthSpace(descriptions[desIndex].flavor_text)}
-              {/* {console.log(descriptions[desIndex].flavor_text.includes("\n"))} */}
-              {/* {descriptions[desIndex].flavor_text} */}
-            </StyledDescription>
+          {Object.keys(pokeInfo).length > 0 && (
+            <>
+              <StyledDescription>
+                {SplitByFullWidthSpace(
+                  pokeInfo.descriptions[desIndex].flavor_text
+                )}
+                {/* {console.log(descriptions[desIndex].flavor_text.includes("\n"))} */}
+                {/* {descriptions[desIndex].flavor_text} */}
+              </StyledDescription>
+              <p>
+                {pokeInfo.descriptions[desIndex]?.version === undefined
+                  ? "???"
+                  : pokeInfo.descriptions[desIndex].version}
+                より
+                <span onClick={() => toggleDescriptions(desIndex)}>
+                  <FaArrowsRotate color={"white"} />
+                </span>
+              </p>
+            </>
           )}
-          <p>
-            {descriptions[desIndex]?.version === undefined
-              ? "???"
-              : descriptions[desIndex].version}
-            より
-            <span onClick={() => toggleDescriptions(desIndex)}>
-              <FaArrowsRotate color={"white"} />
-            </span>
-          </p>
         </StyledInformation>
         <StyledButton onClick={onClick}>戻る</StyledButton>
       </StyledInfoContainer>

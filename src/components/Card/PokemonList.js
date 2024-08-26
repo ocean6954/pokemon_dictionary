@@ -51,7 +51,6 @@ const PokemonList = ({
       const name = await getJapaneseName(pokemonData.name);
       setJapaneseName(name);
     };
-    getPokemonDescription(pokemonData.id);
     fetchJapaneseName();
   }, [pokemonData]);
 

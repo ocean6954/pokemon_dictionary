@@ -2,7 +2,7 @@ export const TYPESETS = [
   {
     name: "normal",
     japanese_name: "ノーマル",
-    color: "#A8A878",
+    color: "#9FA19F",
   },
   {
     name: "fighting",
@@ -88,5 +88,98 @@ export const TYPESETS = [
     name: "fairy",
     japanese_name: "フェアリー",
     color: "#EE99AC",
+  },
+];
+
+export const TYPESETS_2 = [
+  {
+    name: "normal",
+    japanese_name: "ノーマル",
+    color: "#aea886",
+  },
+  {
+    name: "fire",
+    japanese_name: "ほのお",
+    color: "#f45c19",
+  },
+  {
+    name: "water",
+    japanese_name: "みず",
+    color: "#4a96d6",
+  },
+  {
+    name: "grass",
+    japanese_name: "くさ",
+    color: "#28b25c",
+  },
+  {
+    name: "electric",
+    japanese_name: "でんき",
+    color: "#eaa317",
+  },
+  {
+    name: "ice",
+    japanese_name: "こおり",
+    color: "#45a9c0",
+  },
+  {
+    name: "fighting",
+    japanese_name: "かくとう",
+    color: "#9a3d3e",
+  },
+  {
+    name: "poison",
+    japanese_name: "どく",
+    color: "#8f5b98",
+  },
+  {
+    name: "ground",
+    japanese_name: "じめん",
+    color: "#916d3c",
+  },
+  {
+    name: "flying",
+    japanese_name: "ひこう",
+    color: "#7e9ecf",
+  },
+  {
+    name: "psychic",
+    japanese_name: "エスパー",
+    color: "#d56d8b",
+  },
+  {
+    name: "bug",
+    japanese_name: "むし",
+    color: "#989001",
+  },
+  {
+    name: "rock",
+    japanese_name: "いわ",
+    color: "#878052",
+  },
+  {
+    name: "ghost",
+    japanese_name: "ゴースト",
+    color: "#555fa4",
+  },
+  {
+    name: "dragon",
+    japanese_name: "ドラゴン",
+    color: "#454ba6",
+  },
+  {
+    name: "dark",
+    japanese_name: "あく",
+    color: "#7a0049",
+  },
+  {
+    name: "steel",
+    japanese_name: "はがね",
+    color: "#9b9b9b",
+  },
+  {
+    name: "fairy",
+    japanese_name: "フェアリー",
+    color: "#ffbbff",
   },
 ];

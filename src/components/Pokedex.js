@@ -176,6 +176,7 @@ const Pokedex = () => {
         } else {
           setFeaturedPokemon(initialData);
         }
+        console.log("res", res);
 
         setPrevUrl(res.previous || null);
         setNextUrl(res.next || null);
@@ -194,36 +195,11 @@ const Pokedex = () => {
   );
 
   useEffect(() => {
-    const fetch = async (url = initialURL, isPrev = false) => {
-      console.log("fetchの呼び出し");
-      try {
-        setLoading(true);
-        let res = await getAllPokemon(url);
-        let initialData = res.pokemons[0];
-        let lastData = res.pokemons[res.pokemons.length - 1];
-        setPokemonsData(res.pokemons);
-        if (isPrev) {
-          setFeaturedPokemon(lastData);
-        } else {
-          setFeaturedPokemon(initialData);
-        }
-        setPrevUrl(res.previous || null);
-        setNextUrl(res.next || null);
-        setPreLoad(false);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching Pokemon data:", error);
-        setLoading(false);
-      }
-      return () => {
-        console.log("clean up with fetchPokemonData関数");
-      };
-    };
-    fetch();
+    fetchPokemonData();
     return () => {
       console.log("clean up with useEffect");
     };
-  }, []);
+  }, [fetchPokemonData]);
 
   const toggleFeaturedPokemon = (index) => {
     setFeaturedPokemon(pokemonsData[index]);

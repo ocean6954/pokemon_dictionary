@@ -35,10 +35,11 @@ export const getJapaneseName = async (englishName) => {
     const response = await axios.get(
       `${BASE_URL}pokemon-species/${englishName.toLowerCase()}`
     );
+    // console.log("response is ", response);
     const data = response.data;
-    for (let nameInfo of data.names) {
-      if (nameInfo.language.name === "ja-Hrkt") {
-        return nameInfo.name;
+    for (let nameData of data.names) {
+      if (nameData.language.name === "ja-Hrkt") {
+        return nameData.name;
       }
     }
   } catch (error) {
@@ -46,11 +47,27 @@ export const getJapaneseName = async (englishName) => {
   }
 };
 
-export const getPokemonDescription = async (pokemon_id) => {
+export const getGenus = async (englishName) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}pokemon-species/${englishName.toLowerCase()}`
+    );
+    const data = response.data;
+    for (let genusData of data.genera) {
+      if (genusData.language.name === "ja-Hrkt") {
+        return genusData.genus;
+      }
+    }
+  } catch (error) {
+    return "ポケモンの情報を取得できませんでした。";
+  }
+};
+
+export const getPokemonDescription = async (englishName) => {
   const descriptions = [];
   try {
     const response = await axios.get(
-      `${BASE_URL}pokemon-species/${pokemon_id}`
+      `${BASE_URL}pokemon-species/${englishName.toLowerCase()}`
     );
     const data = response.data;
     let count = 0;
@@ -85,6 +102,27 @@ export const getJapaneseType = (englishType) => {
 export const getTypeColor = (name) => {
   const type = TYPESETS.find((set) => set.name === name);
   return type.color;
+};
+
+//ポケモンの日本語名、説明文、分類をまとめて取得する
+export const getPokemonInfo = async (englishName) => {
+  let name;
+  let descriptions = [];
+  let genus;
+
+  try {
+    name = await getJapaneseName(englishName);
+    descriptions = await getPokemonDescription(englishName);
+    genus = await getGenus(englishName);
+
+    return {
+      name,
+      genus,
+      descriptions,
+    };
+  } catch (error) {
+    return "ポケモンの情報を取得できませんでした。";
+  }
 };
 
 export const getPokemon = (url) => {
