@@ -107,7 +107,7 @@ const StyledUnorderedList = styled.ul`
   width: 100%;
   height: 85%;
   margin: 5% 0;
-  overflow: auto;
+  overflow: ${({ $value }) => $value};
 `;
 
 const StyledInfoContainer = styled.div`
@@ -140,6 +140,8 @@ const Pokedex = () => {
   const adjustmentRef = useRef(0);
   const ImageContainerKey = useRef("");
   const SidebarKey = useRef("");
+  // const valueOfOverflow = useRef("auto");
+  const [valueOfOverflow, setValueOfOverflow] = useState("auto");
 
   console.log(" ");
 
@@ -213,17 +215,24 @@ const Pokedex = () => {
     const scrollHeight = scrollableDiv.current.scrollHeight;
     const scrollTop = scrollableDiv.current.scrollTop;
     const clientHeight = scrollableDiv.current.clientHeight;
-    const next = nextUrl;
     if (scrollHeight - scrollTop <= clientHeight + 1) {
-      fetchPokemonData(next);
+      setValueOfOverflow("visible");
+      fetchPokemonData(nextUrl);
       if (scrollableDiv.current) {
         scrollableDiv.current.scrollTop = 3;
+        setTimeout(() => {
+          setValueOfOverflow("auto");
+        }, 500);
       }
     }
     if (scrollTop === 0 && prevUrl) {
+      setValueOfOverflow("visible");
       fetchPokemonData(prevUrl, true);
       if (scrollableDiv.current) {
         scrollableDiv.current.scrollTop = scrollHeight - clientHeight - 2;
+        setTimeout(() => {
+          setValueOfOverflow("auto");
+        }, 500);
       }
     }
   }, [fetchPokemonData, nextUrl, prevUrl]);
@@ -276,13 +285,19 @@ const Pokedex = () => {
             // key={ImageContainerKey.current}
           >
             <Pokemon pokemon={featuredPokemon} />
+            {` valueOfOverflow.currentは${valueOfOverflow}です`}
           </StyledImageContainer>
           <StyledSidebar
             $type2={color2}
             // key={SidebarKey.current}
           >
             {isDefault ? (
-              <StyledUnorderedList ref={scrollableDiv} onScroll={handleScroll}>
+              <StyledUnorderedList
+                ref={scrollableDiv}
+                onScroll={handleScroll}
+                $value={valueOfOverflow}
+              >
+                {/* {console.log()} */}
                 {pokemonsData.map((pokemonData, index) => {
                   return (
                     <PokemonList
