@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import {
   // getJapaneseName,
   getJapaneseType,
@@ -111,10 +111,9 @@ const StyledTable = styled.table`
     width: 100%;
   }
 
-  & tr {
-    display: flex;
-    justify-content: stretch;
-    align-items: center;
+  & th,
+  td {
+    vertical-align: middle; /* 垂直方向の中央揃え */
   }
 
   & th {

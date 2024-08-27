@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getJapaneseName, getPokemonDescription } from "../../api/pokemonAPI";
+import { getJapaneseName } from "../../api/pokemonAPI";
 import styled from "styled-components";
 // import { MonsterBall_b } from "../../images/monster_ball_b.svg";
 // import { MonsterBall_w } from "../../images/monster_ball_w.svg";
