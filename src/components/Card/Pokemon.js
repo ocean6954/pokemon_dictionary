@@ -9,6 +9,23 @@ const addShadow = keyframes`
   }
 `;
 
+const upDown = keyframes`
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-5px);
+  }
+  50% {
+    transform: translateY(5px);
+  }
+  75% {
+    transform: translateY(-2px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+`;
 const StyledCard = styled.div`
   width: var(--card-width);
   /* box-shadow: 2px 8px 21px -2px #777; */
@@ -17,20 +34,7 @@ const StyledCard = styled.div`
   position: relative;
   /* animation: ${addShadow} 2s linear forwards; */
   margin: 0 auto;
-`;
-
-const ToLeftBottom = keyframes`
-  0% {
-    height: 0;
-  }
-  100% {
-    height: 100%;
-  }
-`;
-
-const ToRightTop = keyframes`
-  0% {transform: skewY(45deg) scaleY(0);}
-  100% {transform: skewY(45deg) scaleY(1);}
+  animation: ${upDown} 0.5s forwards;
 `;
 
 const StyledCardBack = styled.div`
@@ -43,32 +47,6 @@ const StyledCardBack = styled.div`
   z-index: -1;
   border-radius: 10px;
   overflow: hidden;
-
-  &::before,
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    /* z-index: 1; */
-    border-radius: 5px;
-  }
-
-  &::before {
-    background-color: ${({ type1 }) => type1};
-    transform: skewY(45deg);
-    transform-origin: bottom left;
-    animation: ${ToRightTop} 1.5s linear forwards;
-  }
-
-  &::after {
-    background-color: ${({ $type2 }) => $type2};
-    transform: skewY(45deg);
-    transform-origin: top right;
-    animation: ${ToLeftBottom} 1.5s linear forwards;
-  }
 `;
 
 const StyledImage = styled.div`

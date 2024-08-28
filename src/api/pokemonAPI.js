@@ -43,7 +43,7 @@ export const getJapaneseName = async (englishName) => {
       }
     }
   } catch (error) {
-    return "ポケモンの情報を取得できませんでした。";
+    return "???";
   }
 };
 

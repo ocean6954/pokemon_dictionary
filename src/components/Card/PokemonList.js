@@ -60,33 +60,36 @@ const PokemonList = ({
 
   return (
     <>
-      <Styledlist
-        isSelected={pokemonData.status}
-        onMouseEnter={onMouseEnter}
-        className={isFeatured ? "featured" : ""}
-        onClick={onClick}
-      >
-        <StyledImg
-          src={pokemonData.sprites.front_default}
-          alt="ポケモン画像"
-          height="70px"
-        ></StyledImg>
-        <p>No.{formatNumberToThreeDigits(pokemonData.id)}</p>
-        <p>{japaneseName}</p>
-        {isFeatured ? (
-          <img
-            src={`${process.env.PUBLIC_URL}/monster_ball_w.svg`}
-            alt="モンスターボール画像"
-            width="50px"
-          ></img>
-        ) : (
-          <img
-            src={`${process.env.PUBLIC_URL}/monster_ball_b.svg`}
-            alt="モンスターボール画像"
-            width="50px"
-          ></img>
-        )}
-      </Styledlist>
+      {Object.keys(pokemonData).length > 0 && (
+        <Styledlist
+          isSelected={pokemonData.status}
+          onMouseEnter={onMouseEnter}
+          className={isFeatured ? "featured" : ""}
+          onClick={onClick}
+        >
+          {console.log("pokemonData is ", pokemonData)}
+          <StyledImg
+            src={pokemonData.sprites.front_default}
+            alt="ポケモン画像"
+            height="70px"
+          ></StyledImg>
+          <p>No.{formatNumberToThreeDigits(pokemonData.id)}</p>
+          <p>{japaneseName}</p>
+          {isFeatured ? (
+            <img
+              src={`${process.env.PUBLIC_URL}/monster_ball_w.svg`}
+              alt="モンスターボール画像"
+              width="50px"
+            ></img>
+          ) : (
+            <img
+              src={`${process.env.PUBLIC_URL}/monster_ball_b.svg`}
+              alt="モンスターボール画像"
+              width="50px"
+            ></img>
+          )}
+        </Styledlist>
+      )}
     </>
   );
 };
