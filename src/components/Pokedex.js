@@ -1,14 +1,13 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
 import { getAllPokemon, getTypeColor, MonsterBall } from "../api/pokemonAPI";
 // import Skeleton from "react-loading-skeleton";
-import { useDebounce } from "use-debounce";
 import "./css/pokedex.css";
 import "react-loading-skeleton/dist/skeleton.css";
 import PokemonList from "./Card/PokemonList";
 import PokeInfo from "./Card/PokeInfo";
 import styled, { keyframes } from "styled-components";
 import { Pokemon } from "./Card/Pokemon";
-import uniqueImageContainerId, { uniqueSideBarId } from "../utils/uniqueId";
+import uniqueId from "../utils/uniqueId";
 
 const StyledMainWrapper = styled.div`
   text-align: center;
@@ -51,7 +50,7 @@ const StyledImageContainer = styled.div`
     width: 100%;
     height: 100%;
     z-index: -2;
-    animation: ${ToRight} 0.5s linear forwards;
+    /* animation: ${ToRight} 0.5s linear forwards; */
   }
   &::after {
     content: "";
@@ -64,7 +63,7 @@ const StyledImageContainer = styled.div`
     border-left: 0px solid transparent;
     border-right: var(--inclination) solid transparent;
     border-bottom: 0px solid transparent;
-    animation: ${ToRight} 0.5s linear forwards;
+    /* animation: ${ToRight} 0.5s linear forwards; */
     transform-origin: left center;
   }
 `;
@@ -85,7 +84,7 @@ const StyledSidebar = styled.div`
     border-left: var(--inclination) solid transparent;
     border-right: 0px solid transparent;
     border-bottom: 100vh solid ${({ $type2 }) => $type2};
-    animation: ${ToLeft} 0.5s linear forwards;
+    /* animation: ${ToLeft} 0.5s linear forwards; */
     transform-origin: right center;
   }
 
@@ -98,7 +97,7 @@ const StyledSidebar = styled.div`
     width: 100%;
     height: 100%;
     background-color: ${({ $type2 }) => $type2};
-    animation: ${ToLeft} 0.5s linear forwards;
+    /* animation: ${ToLeft} 0.5s linear forwards; */
     transform-origin: right center;
   }
 `;
@@ -137,14 +136,15 @@ const Pokedex = () => {
   const [nextUrl, setNextUrl] = useState("");
   const [prevUrl, setPrevUrl] = useState("");
   const [featuredPokemon, setFeaturedPokemon] = useState({});
+  const [valueOfOverflow, setValueOfOverflow] = useState("auto");
+  const [isDefault, setIsDefault] = useState(true);
   const adjustmentRef = useRef(0);
   const ImageContainerKey = useRef("");
-  const SidebarKey = useRef("");
-  // const valueOfOverflow = useRef("auto");
-  const [valueOfOverflow, setValueOfOverflow] = useState("auto");
+  // const SidebarKey = useRef("");
+  // ImageContainerKey.current = uniqueId();
+  // SidebarKey.current = "A" + uniqueId();
 
-  console.log(" ");
-
+  const scrollableDiv = useRef(null);
   let color1;
   let color2;
   if (featuredPokemon && Object.keys(featuredPokemon).length > 0) {
@@ -155,18 +155,10 @@ const Pokedex = () => {
     }
   }
 
-  ImageContainerKey.current = featuredPokemon.name + uniqueImageContainerId();
-  SidebarKey.current = featuredPokemon.name + uniqueSideBarId();
-
-  const [isDefault, setIsDefault] = useState(true);
-
-  const scrollableDiv = useRef(null);
-
-  // const [debouncedScrollableDiv] = useDebounce(scrollableDiv, 1000);
+  console.log(" ");
 
   const fetchPokemonData = useCallback(
     async (url = initialURL, isPrev = false) => {
-      console.log("fetchPokemonData関数 の呼び出し");
       try {
         setLoading(true);
         let res = await getAllPokemon(url);
@@ -178,13 +170,10 @@ const Pokedex = () => {
         } else {
           setFeaturedPokemon(initialData);
         }
-        console.log("res", res);
-
         setPrevUrl(res.previous || null);
         setNextUrl(res.next || null);
         setPreLoad(false);
         setLoading(false);
-        console.log("fetchPokemonData関数 おわり");
       } catch (error) {
         console.error("Error fetching Pokemon data:", error);
         setLoading(false);
@@ -199,7 +188,7 @@ const Pokedex = () => {
   useEffect(() => {
     fetchPokemonData();
     return () => {
-      console.log("clean up with useEffect");
+      // console.log("clean up with useEffect");
     };
   }, [fetchPokemonData]);
 
@@ -222,7 +211,7 @@ const Pokedex = () => {
         scrollableDiv.current.scrollTop = 3;
         setTimeout(() => {
           setValueOfOverflow("auto");
-        }, 500);
+        }, 1000);
       }
     }
     if (scrollTop === 0 && prevUrl) {
@@ -232,12 +221,10 @@ const Pokedex = () => {
         scrollableDiv.current.scrollTop = scrollHeight - clientHeight - 2;
         setTimeout(() => {
           setValueOfOverflow("auto");
-        }, 500);
+        }, 1000);
       }
     }
   }, [fetchPokemonData, nextUrl, prevUrl]);
-
-  // const [debouncedHandleScroll] = useDebounce(handleScroll, 1000);
 
   const toggleNextPokemon = (id = 1) => {
     if (id < 20) {
@@ -276,21 +263,19 @@ const Pokedex = () => {
         <>
           {loading && (
             <StyledLoadingOverlay>
-              {console.log("読み込みLoadなう")}
               <MonsterBall />
             </StyledLoadingOverlay>
           )}
-          <StyledImageContainer
-            $type1={color1}
-            // key={ImageContainerKey.current}
-          >
+          <StyledImageContainer $type1={color1} key={ImageContainerKey.current}>
+            {console.log("imageContainerレンダリング")}
+
             <Pokemon pokemon={featuredPokemon} />
-            {` valueOfOverflow.currentは${valueOfOverflow}です`}
           </StyledImageContainer>
           <StyledSidebar
             $type2={color2}
             // key={SidebarKey.current}
           >
+            {console.log("sideBarレンダリング")}
             {isDefault ? (
               <StyledUnorderedList
                 ref={scrollableDiv}
@@ -299,6 +284,10 @@ const Pokedex = () => {
               >
                 {/* {console.log()} */}
                 {pokemonsData.map((pokemonData, index) => {
+                  console.log("pokeDexでの pokemonsssssData", pokemonsData);
+
+                  // console.log("pokeDexでの pokemonData", pokemonData);
+
                   return (
                     <PokemonList
                       key={pokemonData.id}
@@ -328,5 +317,7 @@ const Pokedex = () => {
     </StyledMainWrapper>
   );
 };
+
+Pokedex.whyDidYouRender = true;
 
 export default Pokedex;
