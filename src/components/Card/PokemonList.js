@@ -1,94 +1,55 @@
-import React, { memo, useEffect, useState } from "react";
-import { getJapaneseName } from "../../api/pokemonAPI";
+import React, { memo } from "react";
 import styled from "styled-components";
-// import { MonsterBall_b } from "../../images/monster_ball_b.svg";
-// import { MonsterBall_w } from "../../images/monster_ball_w.svg";
+import PokemonBar from "./PokemonBar";
 
-const Styledlist = styled.li`
-  display: flex;
-  justify-content: space-between;
-  text-align: center;
-  height: 70px;
-  width: 60%;
-  margin: 0px auto 20px auto;
-  border-radius: 45px;
-  ${({ isSelected }) => isSelected && `background: white;`};
-  position: relative;
-
-  & p {
-    line-height: 70px;
-  }
-  & p:nth-of-type(1) {
-    margin-left: 80px;
-  }
-
-  &.featured {
-    color: white;
-    background-color: black;
-    & p {
-      color: white;
-    }
-  }
-`;
-
-const StyledImg = styled.img`
-  position: absolute;
-  display: inline-block;
-  top: 0%;
-  left: 0;
+const StyledUnorderedList = styled.ul`
+  width: 100%;
+  height: 85%;
+  margin: 5% 0;
+  overflow: ${({ $value }) => $value};
+  overflow: auto;
 `;
 
 const PokemonList = memo(
-  ({ pokemonData, id, isFeatured, onMouseEnter, onClick }) => {
-    console.log("PokemonListレンダリング");
-
-    const [japaneseName, setJapaneseName] = useState("");
-    useEffect(() => {
-      const fetchJapaneseName = async () => {
-        const name = await getJapaneseName(pokemonData.name);
-        setJapaneseName(name);
-      };
-      fetchJapaneseName();
-    }, [pokemonData]);
-
-    const formatNumberToThreeDigits = (number) => {
-      return number.toString().padStart(3, "0");
-    };
-
+  ({
+    scrollableDiv,
+    handleScroll,
+    // valueOfOverflow,
+    pokemonsData,
+    featuredPokemon,
+    toggleFeaturedPokemon,
+    toggleSidebar,
+    japaneseNames,
+  }) => {
+    console.log("Listレンダリング");
     return (
-      <>
-        {Object.keys(pokemonData).length > 0 && (
-          <Styledlist
-            isSelected={pokemonData.status}
-            onMouseEnter={onMouseEnter}
-            className={isFeatured ? "featured" : ""}
-            onClick={onClick}
-          >
-            {/* {console.log("pokemonData is ", pokemonData)} */}
-            <StyledImg
-              src={pokemonData.sprites.front_default}
-              alt="ポケモン画像"
-              height="70px"
-            ></StyledImg>
-            <p>No.{formatNumberToThreeDigits(pokemonData.id)}</p>
-            <p>{japaneseName}</p>
-            {isFeatured ? (
-              <img
-                src={`${process.env.PUBLIC_URL}/monster_ball_w.svg`}
-                alt="モンスターボール画像"
-                width="50px"
-              ></img>
-            ) : (
-              <img
-                src={`${process.env.PUBLIC_URL}/monster_ball_b.svg`}
-                alt="モンスターボール画像"
-                width="50px"
-              ></img>
-            )}
-          </Styledlist>
-        )}
-      </>
+      <StyledUnorderedList
+        ref={scrollableDiv}
+        onScroll={handleScroll}
+        // $value={valueOfOverflow}
+      >
+        {/* {console.log("pokemonsData    ", pokemonsData)}
+        {console.log("featuredPokemon ", featuredPokemon)}
+        {console.log("japaneseNames   ", japaneseNames)} */}
+
+        {console.log(" ")}
+
+        {pokemonsData.map((p, index) => {
+          return (
+            <PokemonBar
+              key={p.id}
+              pokemonData={p}
+              id={p.id}
+              isFeatured={p.id === featuredPokemon.id}
+              onMouseEnter={toggleFeaturedPokemon.bind(null, index)}
+              onClick={toggleSidebar}
+              japaneseName={japaneseNames[index]}
+            />
+          );
+        })}
+      </StyledUnorderedList>
     );
   }
 );
+
 export default PokemonList;

@@ -1,14 +1,18 @@
 import React, { useEffect, useState, useRef, useCallback } from "react";
-import { getAllPokemon, getTypeColor, MonsterBall } from "../api/pokemonAPI";
+import {
+  getAllPokemon,
+  getTypeColor,
+  getJapaneseName,
+  MonsterBall,
+} from "../api/pokemonAPI";
 // import Skeleton from "react-loading-skeleton";
 import "./css/pokedex.css";
 import "react-loading-skeleton/dist/skeleton.css";
-import PokemonList from "./Card/PokemonList";
 import PokeInfo from "./Card/PokeInfo";
 import styled, { keyframes } from "styled-components";
 import { Pokemon } from "./Card/Pokemon";
 import uniqueId from "../utils/uniqueId";
-
+import PokemonList from "./Card/PokemonList";
 const StyledMainWrapper = styled.div`
   text-align: center;
   width: 100%;
@@ -105,7 +109,8 @@ const StyledUnorderedList = styled.ul`
   width: 100%;
   height: 85%;
   margin: 5% 0;
-  overflow: ${({ $value }) => $value};
+  /* overflow: ${({ $value }) => $value}; */
+  overflow: auto;
 `;
 
 const StyledInfoContainer = styled.div`
@@ -137,12 +142,13 @@ const Pokedex = () => {
   const [prevUrl, setPrevUrl] = useState("");
   const [featuredPokemon, setFeaturedPokemon] = useState({});
   const [valueOfOverflow, setValueOfOverflow] = useState("auto");
+  const [jpNames, setJpNames] = useState([]);
 
   const adjustmentRef = useRef(0);
   const ImageContainerKey = useRef("");
   const scrollableDiv = useRef(null);
   // const SidebarKey = useRef("");
-  // ImageContainerKey.current = uniqueId();
+  ImageContainerKey.current = uniqueId();
   // SidebarKey.current = "A" + uniqueId();
 
   let color1;
@@ -165,6 +171,11 @@ const Pokedex = () => {
         let initialData = res.pokemons[0];
         let lastData = res.pokemons[res.pokemons.length - 1];
         setPokemonsData(res.pokemons);
+        let fetchedJapanese = await Promise.all(
+          res.pokemons.map((p) => getJapaneseName(p.name))
+        );
+        setJpNames([...fetchedJapanese]);
+
         if (isPrev) {
           setFeaturedPokemon(lastData);
         } else {
@@ -187,18 +198,19 @@ const Pokedex = () => {
 
   useEffect(() => {
     fetchPokemonData();
-    return () => {
-      // console.log("clean up with useEffect");
-    };
+    return () => {};
   }, [fetchPokemonData]);
 
-  const toggleFeaturedPokemon = (index) => {
-    setFeaturedPokemon(pokemonsData[index]);
-  };
+  const toggleFeaturedPokemon = useCallback(
+    (index) => {
+      setFeaturedPokemon(pokemonsData[index]);
+    },
+    [pokemonsData]
+  );
 
-  const toggleSidebar = () => {
+  const toggleSidebar = useCallback(() => {
     setIsDefault((prev) => !prev);
-  };
+  }, []);
 
   const handleScroll = useCallback(() => {
     const scrollHeight = scrollableDiv.current.scrollHeight;
@@ -245,6 +257,95 @@ const Pokedex = () => {
     setFeaturedPokemon(pokemonsData[id - 1]);
   };
 
+  // Refを使って前回の状態を保存
+  const prevStatesRef = useRef({
+    loading,
+    preLoad,
+    isDefault,
+    pokemonsData,
+    nextUrl,
+    prevUrl,
+    featuredPokemon,
+    scrollableDiv,
+    handleScroll,
+    toggleFeaturedPokemon,
+    toggleSidebar,
+    jpNames,
+  });
+
+  // useEffect(() => {
+  //   const prevStates = prevStatesRef.current;
+
+  //   // 状態が変わった場合にコンソールに出力
+  //   if (loading !== prevStates.loading) {
+  //     console.log("loading changed:", loading);
+  //   }
+  //   if (preLoad !== prevStates.preLoad) {
+  //     console.log("preLoad changed:", preLoad);
+  //   }
+  //   if (isDefault !== prevStates.isDefault) {
+  //     console.log("isDefault changed:", isDefault);
+  //   }
+  //   if (pokemonsData !== prevStates.pokemonsData) {
+  //     console.log("pokemonsData changed:", pokemonsData);
+  //   }
+  //   if (nextUrl !== prevStates.nextUrl) {
+  //     console.log("nextUrl changed:", nextUrl);
+  //   }
+  //   if (prevUrl !== prevStates.prevUrl) {
+  //     console.log("prevUrl changed:", prevUrl);
+  //   }
+  //   if (featuredPokemon !== prevStates.featuredPokemon) {
+  //     console.log("featuredPokemon changed:", featuredPokemon);
+  //   }
+  //   if (scrollableDiv !== prevStates.scrollableDiv) {
+  //     console.log("scrollableDiv changed:", scrollableDiv);
+  //   }
+  //   if (handleScroll !== prevStates.handleScroll) {
+  //     console.log("handleScroll changed:", handleScroll);
+  //   }
+  //   if (toggleFeaturedPokemon !== prevStates.toggleFeaturedPokemon) {
+  //     console.log("toggleFeaturedPokemon changed:", toggleFeaturedPokemon);
+  //   }
+  //   if (toggleSidebar !== prevStates.toggleSidebar) {
+  //     console.log("toggleSidebar changed:", toggleSidebar);
+  //   }
+  //   if (jpNames !== prevStates.jpNames) {
+  //     console.log("jpNames changed:", jpNames);
+  //   }
+
+  //   // 現在の状態をrefに保存
+  //   prevStatesRef.current = {
+  //     loading,
+  //     preLoad,
+  //     isDefault,
+  //     pokemonsData,
+  //     nextUrl,
+  //     prevUrl,
+  //     featuredPokemon,
+  //     scrollableDiv,
+  //     handleScroll,
+  //     toggleFeaturedPokemon,
+  //     toggleSidebar,
+  //     jpNames,
+  //   };
+  // }, [
+  //   loading,
+  //   preLoad,
+  //   isDefault,
+  //   pokemonsData,
+  //   nextUrl,
+  //   prevUrl,
+  //   featuredPokemon,
+  //   scrollableDiv,
+  //   handleScroll,
+  //   toggleFeaturedPokemon,
+  //   toggleSidebar,
+  //   jpNames,
+  // ]);
+
+  // コンポーネントのJS
+
   return (
     <StyledMainWrapper>
       {console.log("PokeDexレンダリング")}
@@ -259,37 +360,39 @@ const Pokedex = () => {
               <MonsterBall />
             </StyledLoadingOverlay>
           )}
-          <StyledImageContainer $type1={color1} key={ImageContainerKey.current}>
-            {/* {console.log("imageContainerレンダリング")} */}
-
+          <StyledImageContainer $type1={color1}>
             <Pokemon pokemon={featuredPokemon} />
           </StyledImageContainer>
-          <StyledSidebar
-            $type2={color2}
-            // key={SidebarKey.current}
-          >
-            {/* {console.log("sideBarレンダリング")} */}
+          <StyledSidebar $type2={color2}>
             {isDefault ? (
-              <StyledUnorderedList
-                ref={scrollableDiv}
-                onScroll={handleScroll}
-                $value={valueOfOverflow}
-              >
-                {/* {console.log()} */}
-                {pokemonsData.map((pokemonData, index) => {
-                  return (
-                    <PokemonList
-                      key={pokemonData.id}
-                      pokemonData={pokemonData}
-                      id={pokemonData.id}
-                      isFeatured={pokemonData.id === featuredPokemon.id}
-                      onMouseEnter={toggleFeaturedPokemon.bind(null, index)}
-                      onClick={toggleSidebar}
-                      colors={{ color1, color2 }}
-                    />
-                  );
-                })}
-              </StyledUnorderedList>
+              // <StyledUnorderedList
+              //   ref={scrollableDiv}
+              //   onScroll={handleScroll}
+              //   $value={valueOfOverflow}
+              // >
+              //   {pokemonsData.map((p, index) => {
+              //     return (
+              //       <PokemonList
+              //         key={p.id}
+              //         pokemonData={p}
+              //         isFeatured={p.id === featuredPokemon.id}
+              //         onMouseEnter={toggleFeaturedPokemon.bind(null, index)}
+              //         onClick={toggleSidebar}
+              //         japaneseNames={jpNames}
+              //       />
+              //     );
+              //   })}
+              //   </StyledUnorderedList>
+              <PokemonList
+                scrollableDiv={scrollableDiv}
+                handleScroll={handleScroll}
+                // valueOfOverflow={valueOfOverflow}
+                pokemonsData={pokemonsData}
+                featuredPokemon={featuredPokemon}
+                toggleFeaturedPokemon={toggleFeaturedPokemon}
+                toggleSidebar={toggleSidebar}
+                japaneseNames={jpNames}
+              />
             ) : (
               <StyledInfoContainer>
                 <PokeInfo

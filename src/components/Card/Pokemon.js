@@ -57,10 +57,9 @@ const StyledImage = styled.div`
 `;
 
 export const Pokemon = memo(({ pokemon }) => {
-  console.log("Pokemonレンダリング");
   const ImageContainerKey = useRef("");
   ImageContainerKey.current = uniqueId();
-
+  console.log("Pokemonれんだ");
   return (
     <StyledCard key={ImageContainerKey.current}>
       <StyledCardBack></StyledCardBack>
