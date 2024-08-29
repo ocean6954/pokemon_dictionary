@@ -25,7 +25,6 @@ const ToRight = keyframes`
     right: 0%;
   }
 `;
-
 const ToLeft = keyframes`
  0% {
     left: 100%; 
@@ -132,19 +131,20 @@ const Pokedex = () => {
   const initialURL = "https://pokeapi.co/api/v2/pokemon";
   const [loading, setLoading] = useState(true);
   const [preLoad, setPreLoad] = useState(true);
+  const [isDefault, setIsDefault] = useState(true);
   const [pokemonsData, setPokemonsData] = useState([]);
   const [nextUrl, setNextUrl] = useState("");
   const [prevUrl, setPrevUrl] = useState("");
   const [featuredPokemon, setFeaturedPokemon] = useState({});
   const [valueOfOverflow, setValueOfOverflow] = useState("auto");
-  const [isDefault, setIsDefault] = useState(true);
+
   const adjustmentRef = useRef(0);
   const ImageContainerKey = useRef("");
+  const scrollableDiv = useRef(null);
   // const SidebarKey = useRef("");
   // ImageContainerKey.current = uniqueId();
   // SidebarKey.current = "A" + uniqueId();
 
-  const scrollableDiv = useRef(null);
   let color1;
   let color2;
   if (featuredPokemon && Object.keys(featuredPokemon).length > 0) {
@@ -249,16 +249,9 @@ const Pokedex = () => {
     <StyledMainWrapper>
       {console.log("PokeDexレンダリング")}
       {preLoad ? (
-        <>
-          {/* <div>
-            {[...Array(20)].map((_, index) => (
-              <Skeleton key={index} className="skeleton-card" />
-            ))}
-          </div> */}
-          <StyledLoadingOverlay>
-            <MonsterBall />
-          </StyledLoadingOverlay>
-        </>
+        <StyledLoadingOverlay>
+          <MonsterBall />
+        </StyledLoadingOverlay>
       ) : (
         <>
           {loading && (
@@ -267,7 +260,7 @@ const Pokedex = () => {
             </StyledLoadingOverlay>
           )}
           <StyledImageContainer $type1={color1} key={ImageContainerKey.current}>
-            {console.log("imageContainerレンダリング")}
+            {/* {console.log("imageContainerレンダリング")} */}
 
             <Pokemon pokemon={featuredPokemon} />
           </StyledImageContainer>
@@ -275,7 +268,7 @@ const Pokedex = () => {
             $type2={color2}
             // key={SidebarKey.current}
           >
-            {console.log("sideBarレンダリング")}
+            {/* {console.log("sideBarレンダリング")} */}
             {isDefault ? (
               <StyledUnorderedList
                 ref={scrollableDiv}
@@ -284,10 +277,6 @@ const Pokedex = () => {
               >
                 {/* {console.log()} */}
                 {pokemonsData.map((pokemonData, index) => {
-                  console.log("pokeDexでの pokemonsssssData", pokemonsData);
-
-                  // console.log("pokeDexでの pokemonData", pokemonData);
-
                   return (
                     <PokemonList
                       key={pokemonData.id}

@@ -1,4 +1,6 @@
+import { memo, useRef } from "react";
 import styled, { keyframes } from "styled-components";
+import uniqueId from "../../utils/uniqueId";
 
 const addShadow = keyframes`
   0% {
@@ -54,9 +56,13 @@ const StyledImage = styled.div`
   height: 100%;
 `;
 
-export const Pokemon = ({ pokemon }) => {
+export const Pokemon = memo(({ pokemon }) => {
+  console.log("Pokemonレンダリング");
+  const ImageContainerKey = useRef("");
+  ImageContainerKey.current = uniqueId();
+
   return (
-    <StyledCard>
+    <StyledCard key={ImageContainerKey.current}>
       <StyledCardBack></StyledCardBack>
       <StyledImage>
         <img
@@ -68,7 +74,7 @@ export const Pokemon = ({ pokemon }) => {
       </StyledImage>
     </StyledCard>
   );
-};
+});
 
 //  <img
 //       src={pokemon.sprites.other["official-artwork"].front_default}

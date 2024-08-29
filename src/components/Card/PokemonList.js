@@ -67,7 +67,7 @@ const PokemonList = ({
           className={isFeatured ? "featured" : ""}
           onClick={onClick}
         >
-          {console.log("pokemonData is ", pokemonData)}
+          {/* {console.log("pokemonData is ", pokemonData)} */}
           <StyledImg
             src={pokemonData.sprites.front_default}
             alt="ポケモン画像"
