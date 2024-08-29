@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { getJapaneseName } from "../../api/pokemonAPI";
 import styled from "styled-components";
 // import { MonsterBall_b } from "../../images/monster_ball_b.svg";
@@ -38,59 +38,57 @@ const StyledImg = styled.img`
   left: 0;
 `;
 
-const PokemonList = ({
-  pokemonData,
-  id,
-  isFeatured,
-  onMouseEnter,
-  onClick,
-}) => {
-  const [japaneseName, setJapaneseName] = useState("");
-  useEffect(() => {
-    const fetchJapaneseName = async () => {
-      const name = await getJapaneseName(pokemonData.name);
-      setJapaneseName(name);
+const PokemonList = memo(
+  ({ pokemonData, id, isFeatured, onMouseEnter, onClick }) => {
+    console.log("PokemonListレンダリング");
+
+    const [japaneseName, setJapaneseName] = useState("");
+    useEffect(() => {
+      const fetchJapaneseName = async () => {
+        const name = await getJapaneseName(pokemonData.name);
+        setJapaneseName(name);
+      };
+      fetchJapaneseName();
+    }, [pokemonData]);
+
+    const formatNumberToThreeDigits = (number) => {
+      return number.toString().padStart(3, "0");
     };
-    fetchJapaneseName();
-  }, [pokemonData]);
 
-  const formatNumberToThreeDigits = (number) => {
-    return number.toString().padStart(3, "0");
-  };
-
-  return (
-    <>
-      {Object.keys(pokemonData).length > 0 && (
-        <Styledlist
-          isSelected={pokemonData.status}
-          onMouseEnter={onMouseEnter}
-          className={isFeatured ? "featured" : ""}
-          onClick={onClick}
-        >
-          {/* {console.log("pokemonData is ", pokemonData)} */}
-          <StyledImg
-            src={pokemonData.sprites.front_default}
-            alt="ポケモン画像"
-            height="70px"
-          ></StyledImg>
-          <p>No.{formatNumberToThreeDigits(pokemonData.id)}</p>
-          <p>{japaneseName}</p>
-          {isFeatured ? (
-            <img
-              src={`${process.env.PUBLIC_URL}/monster_ball_w.svg`}
-              alt="モンスターボール画像"
-              width="50px"
-            ></img>
-          ) : (
-            <img
-              src={`${process.env.PUBLIC_URL}/monster_ball_b.svg`}
-              alt="モンスターボール画像"
-              width="50px"
-            ></img>
-          )}
-        </Styledlist>
-      )}
-    </>
-  );
-};
+    return (
+      <>
+        {Object.keys(pokemonData).length > 0 && (
+          <Styledlist
+            isSelected={pokemonData.status}
+            onMouseEnter={onMouseEnter}
+            className={isFeatured ? "featured" : ""}
+            onClick={onClick}
+          >
+            {/* {console.log("pokemonData is ", pokemonData)} */}
+            <StyledImg
+              src={pokemonData.sprites.front_default}
+              alt="ポケモン画像"
+              height="70px"
+            ></StyledImg>
+            <p>No.{formatNumberToThreeDigits(pokemonData.id)}</p>
+            <p>{japaneseName}</p>
+            {isFeatured ? (
+              <img
+                src={`${process.env.PUBLIC_URL}/monster_ball_w.svg`}
+                alt="モンスターボール画像"
+                width="50px"
+              ></img>
+            ) : (
+              <img
+                src={`${process.env.PUBLIC_URL}/monster_ball_b.svg`}
+                alt="モンスターボール画像"
+                width="50px"
+              ></img>
+            )}
+          </Styledlist>
+        )}
+      </>
+    );
+  }
+);
 export default PokemonList;
