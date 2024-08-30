@@ -28,12 +28,6 @@ const PokemonList = memo(
         onScroll={handleScroll}
         // $value={valueOfOverflow}
       >
-        {/* {console.log("pokemonsData    ", pokemonsData)}
-        {console.log("featuredPokemon ", featuredPokemon)}
-        {console.log("japaneseNames   ", japaneseNames)} */}
-
-        {console.log(" ")}
-
         {pokemonsData.map((p, index) => {
           return (
             <PokemonBar
