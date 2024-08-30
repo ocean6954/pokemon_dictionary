@@ -67,7 +67,6 @@ export const Pokemon = memo(({ pokemon }) => {
         <img
           src={pokemon.sprites.front_default}
           alt="ポケモンのフロント画像"
-          // width="200px"
           height="400px"
         />
       </StyledImage>

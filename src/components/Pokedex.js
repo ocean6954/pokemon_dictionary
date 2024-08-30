@@ -203,13 +203,13 @@ const Pokedex = () => {
     const scrollTop = scrollableDiv.current.scrollTop;
     const clientHeight = scrollableDiv.current.clientHeight;
     if (scrollHeight - scrollTop <= clientHeight + 1) {
-      setValueOfOverflow("visible");
+      // setValueOfOverflow("visible");
       fetchPokemonData(nextUrl);
       if (scrollableDiv.current) {
         scrollableDiv.current.scrollTop = 3;
-        setTimeout(() => {
-          setValueOfOverflow("auto");
-        }, 1000);
+        // setTimeout(() => {
+        //   setValueOfOverflow("auto");
+        // }, 1000);
       }
     }
     if (scrollTop === 0 && prevUrl) {
