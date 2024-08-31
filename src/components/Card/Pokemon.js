@@ -1,6 +1,8 @@
-import { memo, useRef } from "react";
+import { memo, useRef, useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import uniqueId from "../../utils/uniqueId";
+import useSound from "use-sound";
+import url from "../../assets/600.mp3";
 
 const addShadow = keyframes`
   0% {
@@ -59,7 +61,30 @@ const StyledImage = styled.div`
 export const Pokemon = memo(({ pokemon }) => {
   const ImageContainerKey = useRef("");
   ImageContainerKey.current = uniqueId();
-  console.log("Pokemonれんだ");
+
+  const getAudioPath = (id) => {
+    const zeroPaddedId = id.toString().padStart(3, "0");
+
+    //なぜか386前後で拡張子が分かれてるので手動で設定
+    if (id <= 386) {
+      return `${process.env.PUBLIC_URL}/audio/${zeroPaddedId}.wav`;
+    } else if (id >= 397) {
+      return `${process.env.PUBLIC_URL}/audio/${zeroPaddedId}.mp3`;
+    } else {
+      console.error("指定されたIDはサポートされていない範囲です:", id);
+      return null;
+    }
+  };
+
+  const [play] = useSound(getAudioPath(pokemon.id), { volume: 0.5 });
+
+  useEffect(() => {
+    if (getAudioPath(pokemon.id)) {
+      play(); // コンポーネントがマウントされたときに音声を再生
+    }
+    return () => {};
+  }, [pokemon, play]);
+
   return (
     <StyledCard key={ImageContainerKey.current}>
       <StyledCardBack></StyledCardBack>
@@ -70,6 +95,9 @@ export const Pokemon = memo(({ pokemon }) => {
           height="400px"
         />
       </StyledImage>
+      <button onClick={() => play()} style={{ display: "block" }}>
+        play!
+      </button>
     </StyledCard>
   );
 });
