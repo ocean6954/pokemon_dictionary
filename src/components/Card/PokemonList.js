@@ -6,15 +6,15 @@ const StyledUnorderedList = styled.ul`
   width: 100%;
   height: 85%;
   margin: 5% 0;
-  overflow: ${({ $value }) => $value};
-  overflow: auto;
+  overflow: ${({ $value }) => ($value ? "visible" : "auto")};
+  z-index: 1;
 `;
 
 const PokemonList = memo(
   ({
     scrollableDiv,
     handleScroll,
-    // valueOfOverflow,
+    loading,
     pokemonsData,
     featuredPokemon,
     toggleFeaturedPokemon,
@@ -22,11 +22,12 @@ const PokemonList = memo(
     japaneseNames,
   }) => {
     console.log("Listレンダリング");
+
     return (
       <StyledUnorderedList
         ref={scrollableDiv}
         onScroll={handleScroll}
-        // $value={valueOfOverflow}
+        $value={loading}
       >
         {pokemonsData.map((p, index) => {
           return (

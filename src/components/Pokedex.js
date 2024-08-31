@@ -11,6 +11,7 @@ import PokeInfo from "./Card/PokeInfo";
 import styled, { keyframes } from "styled-components";
 import { Pokemon } from "./Card/Pokemon";
 import PokemonList from "./Card/PokemonList";
+
 const StyledMainWrapper = styled.div`
   text-align: center;
   width: 100%;
@@ -124,14 +125,13 @@ const StyledLoadingOverlay = styled.div`
 
 const Pokedex = () => {
   const initialURL = "https://pokeapi.co/api/v2/pokemon";
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [preLoad, setPreLoad] = useState(true);
   const [isDefault, setIsDefault] = useState(true);
   const [pokemonsData, setPokemonsData] = useState([]);
   const [nextUrl, setNextUrl] = useState("");
   const [prevUrl, setPrevUrl] = useState("");
   const [featuredPokemon, setFeaturedPokemon] = useState({});
-  const [valueOfOverflow, setValueOfOverflow] = useState("auto");
   const [jpNames, setJpNames] = useState([]);
 
   const adjustmentRef = useRef(0);
@@ -146,8 +146,6 @@ const Pokedex = () => {
       color2 = getTypeColor(featuredPokemon.types[1].type.name);
     }
   }
-
-  console.log(" ");
 
   const fetchPokemonData = useCallback(
     async (url = initialURL, isPrev = false) => {
@@ -170,7 +168,9 @@ const Pokedex = () => {
         setPrevUrl(res.previous || null);
         setNextUrl(res.next || null);
         setPreLoad(false);
-        setLoading(false);
+        setTimeout(() => {
+          setLoading(false);
+        }, 800);
       } catch (error) {
         console.error("Error fetching Pokemon data:", error);
         setLoading(false);
@@ -203,23 +203,15 @@ const Pokedex = () => {
     const scrollTop = scrollableDiv.current.scrollTop;
     const clientHeight = scrollableDiv.current.clientHeight;
     if (scrollHeight - scrollTop <= clientHeight + 1) {
-      // setValueOfOverflow("visible");
       fetchPokemonData(nextUrl);
       if (scrollableDiv.current) {
         scrollableDiv.current.scrollTop = 3;
-        // setTimeout(() => {
-        //   setValueOfOverflow("auto");
-        // }, 1000);
       }
     }
     if (scrollTop === 0 && prevUrl) {
-      setValueOfOverflow("visible");
       fetchPokemonData(prevUrl, true);
       if (scrollableDiv.current) {
         scrollableDiv.current.scrollTop = scrollHeight - clientHeight - 2;
-        setTimeout(() => {
-          setValueOfOverflow("auto");
-        }, 1000);
       }
     }
   }, [fetchPokemonData, nextUrl, prevUrl]);
@@ -265,7 +257,7 @@ const Pokedex = () => {
               <PokemonList
                 scrollableDiv={scrollableDiv}
                 handleScroll={handleScroll}
-                // valueOfOverflow={valueOfOverflow}
+                loading={loading}
                 pokemonsData={pokemonsData}
                 featuredPokemon={featuredPokemon}
                 toggleFeaturedPokemon={toggleFeaturedPokemon}
@@ -288,7 +280,5 @@ const Pokedex = () => {
     </StyledMainWrapper>
   );
 };
-
-Pokedex.whyDidYouRender = true;
 
 export default Pokedex;
