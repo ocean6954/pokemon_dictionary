@@ -36,6 +36,6 @@
 }
 
 .skeleton-card {
-  width: var(--card-width);
-  height: var(--card-height);
+  width: var(--card_width);
+  height: var(--card_height);
 }

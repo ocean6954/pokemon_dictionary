@@ -11,6 +11,7 @@ import PokeInfo from "./Card/PokeInfo";
 import styled, { keyframes } from "styled-components";
 import { Pokemon } from "./Card/Pokemon";
 import PokemonList from "./Card/PokemonList";
+import uniqueId from "../utils/uniqueId";
 
 const StyledMainWrapper = styled.div`
   text-align: center;
@@ -52,7 +53,7 @@ const StyledImageContainer = styled.div`
     width: 100%;
     height: 100%;
     z-index: -2;
-    /* animation: ${ToRight} 0.5s linear forwards; */
+    animation: ${ToRight} var(--time_slide) linear forwards;
   }
   &::after {
     content: "";
@@ -65,7 +66,7 @@ const StyledImageContainer = styled.div`
     border-left: 0px solid transparent;
     border-right: var(--inclination) solid transparent;
     border-bottom: 0px solid transparent;
-    /* animation: ${ToRight} 0.5s linear forwards; */
+    animation: ${ToRight} var(--time_slide) linear forwards;
     transform-origin: left center;
   }
 `;
@@ -81,12 +82,12 @@ const StyledSidebar = styled.div`
     bottom: 0;
     left: 0;
     z-index: -1;
-    transform: translateX(-100%);
+    transform: translateX(-100%) scale(1.5);
     border-top: 100px solid transparent;
     border-left: var(--inclination) solid transparent;
     border-right: 0px solid transparent;
     border-bottom: 100vh solid ${({ $type2 }) => $type2};
-    /* animation: ${ToLeft} 0.5s linear forwards; */
+    animation: ${ToLeft} var(--time_slide) linear forwards;
     transform-origin: right center;
   }
 
@@ -99,7 +100,7 @@ const StyledSidebar = styled.div`
     width: 100%;
     height: 100%;
     background-color: ${({ $type2 }) => $type2};
-    /* animation: ${ToLeft} 0.5s linear forwards; */
+    animation: ${ToLeft} var(--time_slide) linear forwards;
     transform-origin: right center;
   }
 `;
@@ -136,6 +137,8 @@ const Pokedex = () => {
 
   const adjustmentRef = useRef(0);
   const scrollableDiv = useRef(null);
+  const ImageContainerKey = useRef(uniqueId());
+  const SidebarKey = useRef(uniqueId());
 
   let color1;
   let color2;
@@ -216,24 +219,34 @@ const Pokedex = () => {
     }
   }, [fetchPokemonData, nextUrl, prevUrl]);
 
-  const toggleNextPokemon = (id = 1) => {
-    if (id < 20) {
-      setFeaturedPokemon(pokemonsData[id]);
-    } else {
-      if (id % 20 === 0) {
-        fetchPokemonData(nextUrl);
-        adjustmentRef.current = id;
+  const toggleNextPokemon = useCallback(
+    (id = 1) => {
+      ImageContainerKey.current = uniqueId();
+      SidebarKey.current = uniqueId();
+      if (id < 20) {
+        setFeaturedPokemon(pokemonsData[id]);
+      } else {
+        if (id % 20 === 0) {
+          fetchPokemonData(nextUrl);
+          adjustmentRef.current = id;
+        }
+        setFeaturedPokemon(pokemonsData[id - adjustmentRef.current]);
       }
-      setFeaturedPokemon(pokemonsData[id - adjustmentRef.current]);
-    }
-  };
+    },
+    [fetchPokemonData, nextUrl, pokemonsData]
+  );
 
-  const togglePrevPokemon = (id = 1) => {
-    if (id === 0) {
-      return;
-    }
-    setFeaturedPokemon(pokemonsData[id - 1]);
-  };
+  const togglePrevPokemon = useCallback(
+    (id = 1) => {
+      ImageContainerKey.current = uniqueId();
+      SidebarKey.current = uniqueId();
+      if (id === 0) {
+        return;
+      }
+      setFeaturedPokemon(pokemonsData[id - 1]);
+    },
+    [pokemonsData]
+  );
 
   return (
     <StyledMainWrapper>
@@ -249,10 +262,10 @@ const Pokedex = () => {
               <MonsterBall />
             </StyledLoadingOverlay>
           )}
-          <StyledImageContainer $type1={color1}>
+          <StyledImageContainer key={ImageContainerKey.current} $type1={color1}>
             <Pokemon pokemon={featuredPokemon} />
           </StyledImageContainer>
-          <StyledSidebar $type2={color2}>
+          <StyledSidebar $type2={color2} key={SidebarKey.current}>
             {isDefault ? (
               <PokemonList
                 scrollableDiv={scrollableDiv}

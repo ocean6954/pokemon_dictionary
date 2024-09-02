@@ -1,17 +1,7 @@
-import { memo, useRef, useEffect, useState } from "react";
+import { memo, useRef, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
 import uniqueId from "../../utils/uniqueId";
 import useSound from "use-sound";
-import url from "../../assets/600.mp3";
-
-const addShadow = keyframes`
-  0% {
-    box-shadow: none;
-  }
-  100% {
-    box-shadow: 2px 8px 21px -2px #777;  
-  }
-`;
 
 const upDown = keyframes`
   0% {
@@ -31,12 +21,10 @@ const upDown = keyframes`
   }
 `;
 const StyledCard = styled.div`
-  width: var(--card-width);
-  /* box-shadow: 2px 8px 21px -2px #777; */
-  height: var(--card-height);
+  width: var(--card_width);
+  height: var(--card_height);
   border-radius: 10px;
   position: relative;
-  /* animation: ${addShadow} 2s linear forwards; */
   margin: 0 auto;
   animation: ${upDown} 0.5s forwards;
 `;
@@ -58,17 +46,17 @@ const StyledImage = styled.div`
   height: 100%;
 `;
 
-export const Pokemon = memo(({ pokemon }) => {
+export const Pokemon = memo(({ pokemon, key1 }) => {
+  //每レンダリングでアニメーションと鳴き声を再生するのに使用
   const ImageContainerKey = useRef("");
   ImageContainerKey.current = uniqueId();
 
   const getAudioPath = (id) => {
     const zeroPaddedId = id.toString().padStart(3, "0");
-
-    //なぜか386前後で拡張子が分かれてるので手動で設定
+    //386前後で拡張子が分かれてるので手動で設定
     if (id <= 386) {
       return `${process.env.PUBLIC_URL}/audio/${zeroPaddedId}.wav`;
-    } else if (id >= 397) {
+    } else if (id >= 387) {
       return `${process.env.PUBLIC_URL}/audio/${zeroPaddedId}.mp3`;
     } else {
       console.error("指定されたIDはサポートされていない範囲です:", id);
@@ -76,8 +64,7 @@ export const Pokemon = memo(({ pokemon }) => {
     }
   };
 
-  const [play] = useSound(getAudioPath(pokemon.id), { volume: 0.5 });
-
+  const [play] = useSound(getAudioPath(pokemon.id), { volume: 0.3 });
   useEffect(() => {
     if (getAudioPath(pokemon.id)) {
       play(); // コンポーネントがマウントされたときに音声を再生
@@ -95,9 +82,6 @@ export const Pokemon = memo(({ pokemon }) => {
           height="400px"
         />
       </StyledImage>
-      <button onClick={() => play()} style={{ display: "block" }}>
-        play!
-      </button>
     </StyledCard>
   );
 });
