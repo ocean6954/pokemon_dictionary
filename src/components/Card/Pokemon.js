@@ -46,7 +46,7 @@ const StyledImage = styled.div`
   height: 100%;
 `;
 
-export const Pokemon = memo(({ pokemon, key1 }) => {
+export const Pokemon = memo(({ pokemon }) => {
   //每レンダリングでアニメーションと鳴き声を再生するのに使用
   const ImageContainerKey = useRef("");
   ImageContainerKey.current = uniqueId();

@@ -10,6 +10,8 @@ import { styled } from "styled-components";
 import { IconContext } from "react-icons";
 import { VscTriangleUp } from "react-icons/vsc";
 import { VscTriangleDown } from "react-icons/vsc";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const StyledInfoContainer = styled.div`
   background-color: red;
@@ -137,6 +139,12 @@ const StyledDescription = styled.p`
   }
 `;
 
+const StyledSkelton = styled.div`
+  width: 80px;
+  height: 80px;
+  background-color: purple;
+`;
+
 const StyledButton = styled.button`
   position: absolute;
   right: 10%;
@@ -155,21 +163,16 @@ const PokeInfo = ({ featuredPokemon, onClick, toggleNext, togglePrev }) => {
   // const [descriptions, setDescriptions] = useState([]);
   const [desIndex, setDesIndex] = useState(0);
   const [pokeInfo, setPokeInfo] = useState({});
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // const fetchJapaneseName = async () => {
-    //   const name = await getJapaneseName(featuredPokemon.name);
-    //   setJapaneseName(name);
-    // };
-    // const fetchPokemonDescriptions = async () => {
-    //   const des = await getPokemonDescription(featuredPokemon.id);
-    //   setDescriptions(des);
-    // };
-    // fetchJapaneseName();
-    // fetchPokemonDescriptions();
+    setLoading(true);
+
     const fetchPokemonInfo = async () => {
       const res = await getPokemonInfo(featuredPokemon.name);
       setPokeInfo(res);
+
+      setLoading(false);
     };
     fetchPokemonInfo();
   }, [featuredPokemon]);
@@ -220,11 +223,19 @@ const PokeInfo = ({ featuredPokemon, onClick, toggleNext, togglePrev }) => {
             </IconContext.Provider>
           </StyledNavIcon>
           <StyledNavLeft>
-            <StyledImg
-              src={featuredPokemon.sprites.front_default}
-              alt="ポケモン画像"
-              height="80px"
-            ></StyledImg>
+            {loading ? (
+              <Skeleton
+                className="skeleton-card"
+                height={80}
+                width={80}
+              ></Skeleton>
+            ) : (
+              <StyledImg
+                src={featuredPokemon.sprites.front_default}
+                alt="ポケモン画像"
+                height="80px"
+              ></StyledImg>
+            )}
             <p>No.{featuredPokemon.id.toString().padStart(3, "0")}</p>
           </StyledNavLeft>
           <StyledNavRight>
