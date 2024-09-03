@@ -163,7 +163,7 @@ const PokeInfo = ({ featuredPokemon, onClick, toggleNext, togglePrev }) => {
   // const [descriptions, setDescriptions] = useState([]);
   const [desIndex, setDesIndex] = useState(0);
   const [pokeInfo, setPokeInfo] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     setLoading(true);
