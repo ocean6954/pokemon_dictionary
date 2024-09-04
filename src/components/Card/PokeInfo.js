@@ -158,12 +158,30 @@ const StyledImg = styled.img`
   /* left: 0; */
 `;
 
+const StyledTypeIcon = styled.img`
+  background-color: #4e8ed3;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+`;
+
+const FlexContainer = styled.div`
+  display: inline-flex;
+  /* align-items: center; */
+  /* gap: 8px; */
+  /* margin-left: 5%; */
+  /* width: 90%; */
+  /* margin: 0 auto; */
+  /* justify-content: space-between;  */
+`;
+
 const PokeInfo = ({ featuredPokemon, onClick, toggleNext, togglePrev }) => {
-  // const [japaneseName, setJapaneseName] = useState("");
-  // const [descriptions, setDescriptions] = useState([]);
   const [desIndex, setDesIndex] = useState(0);
   const [pokeInfo, setPokeInfo] = useState({});
   const [loading, setLoading] = useState(true);
+  console.log(" ");
+  console.log("PokeInfoレンダリング");
+  console.log("今のフラグ", loading);
 
   useEffect(() => {
     setLoading(true);
@@ -224,17 +242,20 @@ const PokeInfo = ({ featuredPokemon, onClick, toggleNext, togglePrev }) => {
           </StyledNavIcon>
           <StyledNavLeft>
             {loading ? (
-              <Skeleton
+              <StyledSkelton
                 className="skeleton-card"
                 height={80}
                 width={80}
-              ></Skeleton>
+                $loading={loading}
+              ></StyledSkelton>
             ) : (
-              <StyledImg
-                src={featuredPokemon.sprites.front_default}
-                alt="ポケモン画像"
-                height="80px"
-              ></StyledImg>
+              <>
+                <StyledImg
+                  src={featuredPokemon.sprites.front_default}
+                  alt="ポケモン画像"
+                  height="80px"
+                ></StyledImg>
+              </>
             )}
             <p>No.{featuredPokemon.id.toString().padStart(3, "0")}</p>
           </StyledNavLeft>
@@ -254,7 +275,12 @@ const PokeInfo = ({ featuredPokemon, onClick, toggleNext, togglePrev }) => {
                   const { japanese_name } = getJapaneseType(type);
                   return (
                     <td key={featuredPokemon.name + type.type.name}>
-                      {japanese_name}
+                      <FlexContainer>
+                        {japanese_name}
+                        <StyledTypeIcon
+                          src={`${process.env.PUBLIC_URL}/water.png`}
+                        ></StyledTypeIcon>
+                      </FlexContainer>
                     </td>
                   );
                 })}
