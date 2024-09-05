@@ -5,8 +5,10 @@ import { styled } from "styled-components";
 import { IconContext } from "react-icons";
 import { VscTriangleUp } from "react-icons/vsc";
 import { VscTriangleDown } from "react-icons/vsc";
-import "react-loading-skeleton/dist/skeleton.css";
+import { GiReturnArrow } from "react-icons/gi";
+
 import {
+  StyledInfoWrapper,
   StyledInfoContainer,
   StyledInfoNav,
   StyledNavLeft,
@@ -89,108 +91,120 @@ const PokeInfo = ({
 
   return (
     <>
-      <StyledInfoContainer>
-        <StyledInfoNav>
-          <StyledNavIcon>
-            <IconContext.Provider
-              value={{ color: "var(--white)", size: "2.0rem" }}
-            >
-              <StyledArrowUp
-                onClick={() => {
-                  togglePrev(featuredPokemon.id - 1);
-                }}
+      <StyledInfoWrapper>
+        <StyledInfoContainer>
+          <StyledInfoNav>
+            <StyledNavIcon>
+              <IconContext.Provider
+                value={{ color: "var(--white)", size: "2.0rem" }}
               >
-                <VscTriangleUp />
-              </StyledArrowUp>
-            </IconContext.Provider>
+                <StyledArrowUp
+                  onClick={() => {
+                    togglePrev(featuredPokemon.id - 1);
+                  }}
+                >
+                  <VscTriangleUp />
+                </StyledArrowUp>
+              </IconContext.Provider>
 
-            <IconContext.Provider
-              value={{ color: "var(--white)", size: "2.0rem" }}
-            >
-              <StyledArrowDown
-                onClick={() => {
-                  toggleNext(featuredPokemon.id);
-                }}
+              <IconContext.Provider
+                value={{ color: "var(--white)", size: "2.0rem" }}
               >
-                <VscTriangleDown />
-              </StyledArrowDown>
-            </IconContext.Provider>
-          </StyledNavIcon>
-          <StyledNavLeft
-            $color1={adjustColorBrightness(color1, colorBrightnessValue)}
-          >
-            <img
-              src={featuredPokemon.sprites.front_default}
-              alt="ポケモン画像"
-              height="80px"
-              width="80px"
-            ></img>
-            <p>No.{featuredPokemon.id.toString().padStart(3, "0")}</p>
-          </StyledNavLeft>
-          <StyledNavRight
-            $color2={adjustColorBrightness(color2, colorBrightnessValue)}
-          >
-            <p>{pokeInfo.name}</p>
-          </StyledNavRight>
-        </StyledInfoNav>
-        <StyledInformation>
-          <StyledInfoHead>
-            <p>{pokeInfo.genus}</p>
-          </StyledInfoHead>
-          <StyledTable>
-            <tbody>
-              <tr>
-                <th>タイプ</th>
-                {featuredPokemon.types.map((type) => {
-                  const { japanese_name } = getJapaneseType(type);
-                  return (
-                    <td key={featuredPokemon.name + type.type.name}>
-                      <FlexContainer>
-                        {japanese_name}
-                        <StyledTypeIcon
-                          src={`${process.env.PUBLIC_URL}/water.png`}
-                        ></StyledTypeIcon>
-                      </FlexContainer>
-                    </td>
-                  );
-                })}
-              </tr>
-              <tr>
-                <th>高さ</th>
-                <td>{(featuredPokemon.height / 10).toFixed(1)}m</td>
-              </tr>
-              <tr>
-                <th>重さ</th>
-                <td>{(featuredPokemon.weight / 10).toFixed(1)}kg</td>
-              </tr>
-              {/* <tr>
+                <StyledArrowDown
+                  onClick={() => {
+                    toggleNext(featuredPokemon.id);
+                  }}
+                >
+                  <VscTriangleDown />
+                </StyledArrowDown>
+              </IconContext.Provider>
+            </StyledNavIcon>
+            <StyledNavLeft
+              $color1={adjustColorBrightness(color1, colorBrightnessValue)}
+            >
+              <img
+                src={featuredPokemon.sprites.front_default}
+                alt="ポケモン画像"
+                height="80px"
+                width="80px"
+              ></img>
+              <p>No.{featuredPokemon.id.toString().padStart(3, "0")}</p>
+            </StyledNavLeft>
+            <StyledNavRight
+              $color2={adjustColorBrightness(color2, colorBrightnessValue)}
+            >
+              <p>{pokeInfo.name}</p>
+            </StyledNavRight>
+          </StyledInfoNav>
+          <StyledInformation>
+            <StyledInfoHead>
+              <p>{pokeInfo.genus}</p>
+            </StyledInfoHead>
+            <StyledTable>
+              <tbody>
+                <tr>
+                  <th>タイプ</th>
+                  {featuredPokemon.types.map((type) => {
+                    const { japanese_name } = getJapaneseType(type);
+                    return (
+                      <td key={featuredPokemon.name + type.type.name}>
+                        <FlexContainer>
+                          {japanese_name}
+                          <StyledTypeIcon
+                            src={`${process.env.PUBLIC_URL}/water.png`}
+                          ></StyledTypeIcon>
+                        </FlexContainer>
+                      </td>
+                    );
+                  })}
+                </tr>
+                <tr>
+                  <th>高さ</th>
+                  <td>{(featuredPokemon.height / 10).toFixed(1)}m</td>
+                </tr>
+                <tr>
+                  <th>重さ</th>
+                  <td>{(featuredPokemon.weight / 10).toFixed(1)}kg</td>
+                </tr>
+                {/* <tr>
                 <th>アビリティ: {featuredPokemon.abilities[0].ability.name}</th>
               </tr> */}
-            </tbody>
-          </StyledTable>
-          {Object.keys(pokeInfo).length > 0 && (
-            <>
-              <StyledDescriptionContainer>
-                <StyledDescription>
-                  {SplitByFullWidthSpace(
-                    pokeInfo.descriptions[desIndex].flavor_text
-                  )}
-                </StyledDescription>
-              </StyledDescriptionContainer>
-              <p>
-                {pokeInfo.descriptions[desIndex]?.version === undefined
-                  ? "???"
-                  : pokeInfo.descriptions[desIndex].version}
-                より
-                <span onClick={() => toggleDescriptions(desIndex)}>
-                  <FaArrowsRotate color={"white"} />
-                </span>
-              </p>
-            </>
-          )}
-        </StyledInformation>
-        <StyledButton onClick={onClick}>戻る</StyledButton>
-      </StyledInfoContainer>
+              </tbody>
+            </StyledTable>
+            {Object.keys(pokeInfo).length > 0 && (
+              <>
+                <StyledDescriptionContainer>
+                  <StyledDescription>
+                    {SplitByFullWidthSpace(
+                      pokeInfo.descriptions[desIndex].flavor_text
+                    )}
+                  </StyledDescription>
+                </StyledDescriptionContainer>
+                <p>
+                  {pokeInfo.descriptions[desIndex]?.version === undefined
+                    ? "???"
+                    : pokeInfo.descriptions[desIndex].version}
+                  より
+                  <span onClick={() => toggleDescriptions(desIndex)}>
+                    <FaArrowsRotate color={"white"} />
+                  </span>
+                </p>
+              </>
+            )}
+          </StyledInformation>
+        </StyledInfoContainer>
+        <StyledButton onClick={onClick}>
+          {/* 戻る */}
+          <IconContext.Provider
+            value={{
+              color: "#9EC632",
+              size: "40px",
+            }}
+          >
+            <GiReturnArrow />
+          </IconContext.Provider>
+        </StyledButton>
+      </StyledInfoWrapper>
     </>
   );
 };

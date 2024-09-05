@@ -1,8 +1,15 @@
 import { styled } from "styled-components";
 
+const StyledInfoWrapper = styled.div`
+  width: 100%;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const StyledInfoContainer = styled.div`
   width: 90%;
-  margin: 0 auto;
   height: 550px;
 `;
 
@@ -140,9 +147,20 @@ const StyledDescription = styled.p`
 `;
 
 const StyledButton = styled.button`
+  background-color: transparent;
   position: absolute;
-  right: 10%;
-  bottom: -10;
+  /* right: 10%; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  bottom: 20%;
+  margin: 0 auto;
+  /* left: 0; */
+  gap: 20px;
+  transform: rotate(-20deg);
+  & span {
+    vertical-align: middle;
+  }
 `;
 
 const StyledTypeIcon = styled.img`
@@ -153,6 +171,7 @@ const StyledTypeIcon = styled.img`
 `;
 
 export {
+  StyledInfoWrapper,
   StyledInfoContainer,
   StyledInfoNav,
   StyledNavLeft,

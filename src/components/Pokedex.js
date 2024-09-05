@@ -105,13 +105,6 @@ const StyledSidebar = styled.div`
   }
 `;
 
-const StyledInfoContainer = styled.div`
-  width: 100%;
-  height: 90%;
-  display: flex;
-  align-items: center;
-`;
-
 const StyledLoadingOverlay = styled.div`
   position: absolute;
   top: 0;
@@ -278,16 +271,14 @@ const Pokedex = () => {
                 japaneseNames={jpNames}
               />
             ) : (
-              <StyledInfoContainer>
-                <PokeInfo
-                  featuredPokemon={featuredPokemon}
-                  onClick={toggleSidebar}
-                  toggleNext={toggleNextPokemon}
-                  togglePrev={togglePrevPokemon}
-                  color1={color1}
-                  color2={color2}
-                />
-              </StyledInfoContainer>
+              <PokeInfo
+                featuredPokemon={featuredPokemon}
+                onClick={toggleSidebar}
+                toggleNext={toggleNextPokemon}
+                togglePrev={togglePrevPokemon}
+                color1={color1}
+                color2={color2}
+              />
             )}
           </StyledSidebar>
         </>
