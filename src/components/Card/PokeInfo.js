@@ -14,7 +14,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
 const StyledInfoContainer = styled.div`
-  background-color: red;
+  /* background-color: red; */
   width: 90%;
   margin: 0 auto;
   height: 550px;
@@ -22,7 +22,6 @@ const StyledInfoContainer = styled.div`
 
 const StyledInfoNav = styled.div`
   height: 60px;
-  background-color: blue;
   margin-bottom: 40px;
   display: flex;
   justify-content: center;
@@ -33,23 +32,26 @@ const StyledInfoNav = styled.div`
 
 const StyledNavLeft = styled.div`
   width: 40%;
-  background-color: #f2501e;
+  position: relative;
   display: flex;
   align-items: center;
-  transform-origin: top left;
-  transform: skew(-30deg) scaleX(1.1);
 
-  & img,
-  p {
-    transform: skew(28deg) scaleX(1);
+  &::after {
+    content: "";
+    position: absolute;
+    background-color: #f2501e;
+    width: 100%;
+    height: 100%;
   }
 
   & img {
-    margin-left: 10%;
+    margin-left: 5%;
+    z-index: 2;
   }
 
   & p {
     color: var(--white);
+    z-index: 2;
     font-size: 20px;
     font-weight: 600;
     line-height: 1;
@@ -59,21 +61,29 @@ const StyledNavLeft = styled.div`
 const StyledNavRight = styled.div`
   width: 60%;
   height: 100%;
-  background-color: var(--black);
   display: flex;
   align-items: center;
-  transform-origin: bottom right;
-  transform: skew(-30deg) scaleX(1.1);
+
+  &::after {
+    content: "";
+    position: absolute;
+    background-color: var(--black);
+    width: 100%;
+    height: 100%;
+    transform-origin: bottom right;
+    transform: skew(-30deg) scale(1.1);
+  }
 
   & p {
     color: var(--white);
     font-size: 30px;
     line-height: 1;
-    transform: skew(25deg) scaleX(1);
     margin-left: 5%;
     font-weight: 600;
+    z-index: 2;
   }
 `;
+
 const StyledNavIcon = styled.div`
   position: fixed;
   z-index: 10;
@@ -241,22 +251,13 @@ const PokeInfo = ({ featuredPokemon, onClick, toggleNext, togglePrev }) => {
             </IconContext.Provider>
           </StyledNavIcon>
           <StyledNavLeft>
-            {loading ? (
-              <StyledSkelton
-                className="skeleton-card"
-                height={80}
-                width={80}
-                $loading={loading}
-              ></StyledSkelton>
-            ) : (
-              <>
-                <StyledImg
-                  src={featuredPokemon.sprites.front_default}
-                  alt="ポケモン画像"
-                  height="80px"
-                ></StyledImg>
-              </>
-            )}
+            <StyledImg
+              src={featuredPokemon.sprites.front_default}
+              alt="ポケモン画像"
+              height="80px"
+              width="80px"
+            ></StyledImg>
+
             <p>No.{featuredPokemon.id.toString().padStart(3, "0")}</p>
           </StyledNavLeft>
           <StyledNavRight>
