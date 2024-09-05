@@ -284,6 +284,8 @@ const Pokedex = () => {
                   onClick={toggleSidebar}
                   toggleNext={toggleNextPokemon}
                   togglePrev={togglePrevPokemon}
+                  color1={color1}
+                  color2={color2}
                 />
               </StyledInfoContainer>
             )}
