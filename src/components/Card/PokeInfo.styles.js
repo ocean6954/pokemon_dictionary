@@ -1,4 +1,5 @@
 import { styled } from "styled-components";
+import { COLORSETS } from "../../type-sets";
 
 const StyledInfoWrapper = styled.div`
   width: 100%;
@@ -155,7 +156,6 @@ const StyledButton = styled.button`
   justify-content: center;
   bottom: 20%;
   margin: 0 auto;
-  /* left: 0; */
   gap: 20px;
   transform: rotate(-20deg);
   & span {
@@ -168,6 +168,32 @@ const StyledTypeIcon = styled.img`
   border-radius: 50%;
   width: 25px;
   height: 25px;
+`;
+
+const StyledToggleDescriptionContainer = styled.button`
+  display: flex;
+  background-color: transparent;
+  margin: 20px auto;
+  gap: 20px;
+`;
+
+const StyledToggleDescription = styled.button`
+  /* background-color: var(--pokemon-white); */
+  background: ${({ $version }) =>
+    `linear-gradient(45deg, ${COLORSETS[$version].start}, ${COLORSETS[$version].end})`};
+  color: var(--white);
+  padding: 10px 20px;
+  border: none;
+  border-radius: 50px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  display: inline-block;
+
+  &:hover {
+    background-color: #8ab52c; /* ホバー時の色 */
+  }
 `;
 
 export {
@@ -186,4 +212,6 @@ export {
   StyledDescription,
   StyledButton,
   StyledTypeIcon,
+  StyledToggleDescription,
+  StyledToggleDescriptionContainer,
 };

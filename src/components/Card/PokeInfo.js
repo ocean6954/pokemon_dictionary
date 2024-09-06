@@ -23,6 +23,8 @@ import {
   StyledDescription,
   StyledButton,
   StyledTypeIcon,
+  StyledToggleDescription,
+  StyledToggleDescriptionContainer,
 } from "./PokeInfo.styles";
 
 const colorBrightnessValue = -60;
@@ -180,15 +182,20 @@ const PokeInfo = ({
                     )}
                   </StyledDescription>
                 </StyledDescriptionContainer>
-                <p>
-                  {pokeInfo.descriptions[desIndex]?.version === undefined
-                    ? "???"
-                    : pokeInfo.descriptions[desIndex].version}
-                  より
-                  <span onClick={() => toggleDescriptions(desIndex)}>
-                    <FaArrowsRotate color={"white"} />
-                  </span>
-                </p>
+                <StyledToggleDescriptionContainer>
+                  {pokeInfo.descriptions.map((description) => (
+                    <StyledToggleDescription
+                      onClick={() => toggleDescriptions(desIndex)}
+                      $version={description.version}
+                    >
+                      {description.version}
+                    </StyledToggleDescription>
+                  ))}
+                </StyledToggleDescriptionContainer>
+                {/* {pokeInfo.descriptions[desIndex]?.version === undefined */}
+                <span onClick={() => toggleDescriptions(desIndex)}>
+                  <FaArrowsRotate color={"white"} />
+                </span>
               </>
             )}
           </StyledInformation>

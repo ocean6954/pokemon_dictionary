@@ -91,6 +91,7 @@ export const TYPESETS = [
   },
 ];
 
+//少し色変えたやつ
 export const TYPESETS_2 = [
   {
     name: "normal",
@@ -183,3 +184,22 @@ export const TYPESETS_2 = [
     color: "#ffbbff",
   },
 ];
+
+export const COLORSETS = {
+  "ポケットモンスター シールド": {
+    start: "#00A1EA",
+    end: "#45BCB9",
+  },
+  "ポケットモンスター ソード": {
+    start: "#E6005A",
+    end: "#A40044",
+  },
+  "ポケットモンスター Let's Go! イーブイ": {
+    start: "#C5741F",
+    end: "#F5E09C",
+  },
+  "ポケットモンスター Let's Go! ピカチュウ": {
+    start: "#F0C736",
+    end: "#F29616",
+  },
+};
