@@ -178,10 +178,6 @@ const StyledToggleDescriptionContainer = styled.button`
 `;
 
 const StyledToggleDescription = styled.button`
-  /* background-color: var(--pokemon-white); */
-  background: ${({ $version }) =>
-    `linear-gradient(45deg, ${COLORSETS[$version].start}, ${COLORSETS[$version].end})`};
-  color: var(--white);
   padding: 10px 20px;
   border: none;
   border-radius: 50px;
@@ -190,9 +186,52 @@ const StyledToggleDescription = styled.button`
   cursor: pointer;
   transition: background-color 0.3s;
   display: inline-block;
+  position: relative;
 
+  ${({ $isSelected, $version }) =>
+    $isSelected &&
+    `
+      background: linear-gradient(45deg, ${COLORSETS[$version].start}, ${COLORSETS[$version].end});
+      & span{
+        color: var(--white);
+      }
+        transform: translateY(3px) translateX(3px);
+
+    `}
+
+  ${({ $isSelected, $version }) =>
+    !$isSelected &&
+    `
+      background-color: var(--white);
+      box-shadow: 4px 4px rgba(0, 0, 0, 0.3);
+      & span{
+        background: linear-gradient(45deg, ${COLORSETS[$version].start}, ${COLORSETS[$version].end});
+        -webkit-background-clip: text;
+        color: transparent;
+        display: inline-block;
+      }
+      &::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.3); 
+        border-radius: 50px;
+        z-index: 5;
+
+        &:hover {
+        // transform: translateY(3px) translateX(3px);
+        }
+      }   
+    `}
+    
+
+ 
   &:hover {
-    background-color: #8ab52c; /* ホバー時の色 */
+    transform: translateY(3px) translateX(3px);
+    box-shadow: none;
   }
 `;
 

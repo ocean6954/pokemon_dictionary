@@ -183,12 +183,13 @@ const PokeInfo = ({
                   </StyledDescription>
                 </StyledDescriptionContainer>
                 <StyledToggleDescriptionContainer>
-                  {pokeInfo.descriptions.map((description) => (
+                  {pokeInfo.descriptions.map((description, index) => (
                     <StyledToggleDescription
                       onClick={() => toggleDescriptions(desIndex)}
                       $version={description.version}
+                      $isSelected={desIndex === index}
                     >
-                      {description.version}
+                      <span>{description.version}</span>
                     </StyledToggleDescription>
                   ))}
                 </StyledToggleDescriptionContainer>
