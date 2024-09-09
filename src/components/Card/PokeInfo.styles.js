@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { COLORSETS } from "../../type-sets";
+import { COLORSETS, COLORSETS2 } from "../../type-sets";
 
 const StyledInfoWrapper = styled.div`
   width: 100%;
@@ -140,7 +140,6 @@ const StyledDescription = styled.p`
   width: 85%;
   height: auto;
   text-align: left;
-  /* margin-left: 5%; */
 
   & span {
     display: inline-block;
@@ -170,41 +169,44 @@ const StyledTypeIcon = styled.img`
   height: 25px;
 `;
 
-const StyledToggleDescriptionContainer = styled.button`
+const StyledToggleDescriptionContainer = styled.div`
   display: flex;
-  background-color: transparent;
   margin: 20px auto;
-  gap: 20px;
+  border-radius: 50px;
+  /* background-color: green; */
 `;
 
 const StyledToggleDescription = styled.button`
   padding: 10px 20px;
   border: none;
-  border-radius: 50px;
   font-size: 16px;
   font-weight: bold;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  display: inline-block;
-  position: relative;
 
-  ${({ $isSelected, $version }) =>
-    $isSelected &&
+  transition: background-color 0.3s;
+
+  ${({ $isSelected, $desIndex, $version }) =>
+    $desIndex === 0 &&
     `
+    ${
+      $isSelected
+        ? `
+      pointer-events: none;
       background: linear-gradient(45deg, ${COLORSETS[$version].start}, ${COLORSETS[$version].end});
-      & span{
+      border-radius: 50px 0 0 50px;
+      clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0 100%);      
+      transform: translateX(10px) ;
+      & span {
         color: var(--white);
       }
-        transform: translateY(3px) translateX(3px);
-
-    `}
-
-  ${({ $isSelected, $version }) =>
-    !$isSelected &&
     `
-      background-color: var(--white);
-      box-shadow: 4px 4px rgba(0, 0, 0, 0.3);
-      & span{
+        : `
+        cursor: pointer;
+        background: var(--gray);
+        border-radius: 0 50px 50px 0;
+        clip-path: polygon(20px 0, 100% 0, 100% 100%, 0 100%);
+        transform: translateX(-10px) translateY(-3px);
+
+      & span {
         background: linear-gradient(45deg, ${COLORSETS[$version].start}, ${COLORSETS[$version].end});
         -webkit-background-clip: text;
         color: transparent;
@@ -215,24 +217,60 @@ const StyledToggleDescription = styled.button`
         position: absolute;
         top: 0;
         left: 0;
-        width: 100%;
+        width:100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.3); 
-        border-radius: 50px;
+        // background:red;
+        opacity: 0.4;
         z-index: 5;
 
         &:hover {
-        // transform: translateY(3px) translateX(3px);
+          // transform: translateY(3px) translateX(3px);
         }
-      }   
-    `}
-    
+      }
+      &:hover {
+        transform: translateX(-10px) translateY(1px);
+      }
+    `
+    }
+  `}
 
- 
-  &:hover {
-    transform: translateY(3px) translateX(3px);
-    box-shadow: none;
-  }
+  ${({ $isSelected, $desIndex, $version }) =>
+    $desIndex === 1 &&
+    `
+    ${
+      $isSelected
+        ? `
+      pointer-events: none;
+      background: linear-gradient(45deg, ${COLORSETS[$version].end}, ${COLORSETS[$version].start});
+      border-radius: 0 50px 50px 0;
+      clip-path: polygon(20px 0, 100% 0, 100% 100%, 0 100%);      
+      transform: translateX(-10px);
+
+      & span {
+        color: var(--white);
+      }
+
+    `
+        : `
+        cursor: pointer;
+        background: var(--gray);
+        border-radius: 50px 0 0 50px ;
+        clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
+        transform: translateX(10px) translateY(-3px);
+
+      & span {
+        background: linear-gradient(45deg, ${COLORSETS[$version].start}, ${COLORSETS[$version].end});
+        -webkit-background-clip: text;
+        color: transparent;
+        display: inline-block;
+      }
+
+      &:hover {
+        transform: translateX(10px) translateY(1px);
+      }
+    `
+    }
+  `}
 `;
 
 export {

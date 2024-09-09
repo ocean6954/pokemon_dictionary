@@ -186,6 +186,8 @@ const PokeInfo = ({
                         onClick={() => toggleDescriptions(desIndex)}
                         $version={description.version}
                         $isSelected={desIndex === index}
+                        $desIndex={desIndex}
+                        $index={index}
                       >
                         <span>{description.version}</span>
                       </StyledToggleDescription>
