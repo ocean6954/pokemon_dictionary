@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { getJapaneseType, getPokemonInfo } from "../../api/pokemonAPI";
-import { FaArrowsRotate } from "react-icons/fa6";
 import { styled } from "styled-components";
 import { IconContext } from "react-icons";
 import { VscTriangleUp } from "react-icons/vsc";
@@ -181,37 +180,33 @@ const PokeInfo = ({
                       pokeInfo.descriptions[desIndex].flavor_text
                     )}
                   </StyledDescription>
+                  <StyledToggleDescriptionContainer>
+                    {pokeInfo.descriptions.map((description, index) => (
+                      <StyledToggleDescription
+                        onClick={() => toggleDescriptions(desIndex)}
+                        $version={description.version}
+                        $isSelected={desIndex === index}
+                      >
+                        <span>{description.version}</span>
+                      </StyledToggleDescription>
+                    ))}
+                  </StyledToggleDescriptionContainer>
                 </StyledDescriptionContainer>
-                <StyledToggleDescriptionContainer>
-                  {pokeInfo.descriptions.map((description, index) => (
-                    <StyledToggleDescription
-                      onClick={() => toggleDescriptions(desIndex)}
-                      $version={description.version}
-                      $isSelected={desIndex === index}
-                    >
-                      <span>{description.version}</span>
-                    </StyledToggleDescription>
-                  ))}
-                </StyledToggleDescriptionContainer>
-                {/* {pokeInfo.descriptions[desIndex]?.version === undefined */}
-                <span onClick={() => toggleDescriptions(desIndex)}>
-                  <FaArrowsRotate color={"white"} />
-                </span>
+
+                <StyledButton onClick={onClick}>
+                  <IconContext.Provider
+                    value={{
+                      color: "#9EC632",
+                      size: "40px",
+                    }}
+                  >
+                    <GiReturnArrow />
+                  </IconContext.Provider>
+                </StyledButton>
               </>
             )}
           </StyledInformation>
         </StyledInfoContainer>
-        <StyledButton onClick={onClick}>
-          {/* 戻る */}
-          <IconContext.Provider
-            value={{
-              color: "#9EC632",
-              size: "40px",
-            }}
-          >
-            <GiReturnArrow />
-          </IconContext.Provider>
-        </StyledButton>
       </StyledInfoWrapper>
     </>
   );
