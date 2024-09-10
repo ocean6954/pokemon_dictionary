@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { getJapaneseType, getPokemonInfo } from "../../api/pokemonAPI";
 import { styled } from "styled-components";
-import { IconContext } from "react-icons";
 import { VscTriangleUp } from "react-icons/vsc";
+import { IconContext } from "react-icons";
 import { VscTriangleDown } from "react-icons/vsc";
 import { GiReturnArrow } from "react-icons/gi";
 
@@ -20,8 +20,8 @@ import {
   StyledTable,
   StyledDescriptionContainer,
   StyledDescription,
-  StyledButton,
   StyledTypeIcon,
+  StyledButton,
   StyledToggleDescription,
   StyledToggleDescriptionContainer,
 } from "./PokeInfo.styles";
@@ -57,9 +57,9 @@ const FlexContainer = styled.div`
 
 const PokeInfo = ({
   featuredPokemon,
-  onClick,
   toggleNext,
   togglePrev,
+  onClick,
   color1,
   color2,
 }) => {
@@ -199,18 +199,17 @@ const PokeInfo = ({
                       </StyledToggleDescription>
                     ))}
                   </StyledToggleDescriptionContainer>
+                  <StyledButton onClick={onClick}>
+                    <IconContext.Provider
+                      value={{
+                        color: "#9EC632",
+                        size: "40px",
+                      }}
+                    >
+                      <GiReturnArrow />
+                    </IconContext.Provider>
+                  </StyledButton>
                 </StyledDescriptionContainer>
-
-                <StyledButton onClick={onClick}>
-                  <IconContext.Provider
-                    value={{
-                      color: "#9EC632",
-                      size: "40px",
-                    }}
-                  >
-                    <GiReturnArrow />
-                  </IconContext.Provider>
-                </StyledButton>
               </>
             )}
           </StyledInformation>

@@ -130,6 +130,8 @@ const StyledDescriptionContainer = styled.div`
   width: 100%;
   background-color: var(--pokemon-white);
   padding: 5%;
+  position: relative;
+  background-color: orange;
 `;
 
 const StyledDescription = styled.p`
@@ -153,7 +155,8 @@ const StyledButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  bottom: 20%;
+  bottom: -20%;
+  right: 50%;
   margin: 0 auto;
   gap: 20px;
   transform: rotate(-20deg);
