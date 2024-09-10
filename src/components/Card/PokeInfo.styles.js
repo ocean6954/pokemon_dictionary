@@ -131,7 +131,7 @@ const StyledDescriptionContainer = styled.div`
   background-color: var(--pokemon-white);
   padding: 5%;
   position: relative;
-  background-color: orange;
+  /* background-color: orange; */
 `;
 
 const StyledDescription = styled.p`
@@ -148,18 +148,18 @@ const StyledDescription = styled.p`
   }
 `;
 
-const StyledButton = styled.button`
+const StyledBackButton = styled.button`
   background-color: transparent;
   position: absolute;
-  /* right: 10%; */
   display: flex;
   align-items: center;
   justify-content: center;
-  bottom: -20%;
+  bottom: -100%;
   right: 50%;
   margin: 0 auto;
   gap: 20px;
-  transform: rotate(-20deg);
+  bottom: 0%;
+  transform: translateY(calc(100% + 10px)) rotate(-20deg);
   & span {
     vertical-align: middle;
   }
@@ -172,11 +172,15 @@ const StyledTypeIcon = styled.img`
   height: 25px;
 `;
 
-const StyledToggleDescriptionContainer = styled.div`
+const StyledToggleDescriptionButtonButtonContainer = styled.div`
   display: flex;
-  margin: 20px auto;
+  margin: 0 auto;
   border-radius: 50px;
   justify-content: stretch;
+  /* background-color: green; */
+  position: absolute;
+  bottom: 0%;
+  transform: translateY(calc(100% + 10px));
 `;
 
 const moveLeft = keyframes`
@@ -208,7 +212,7 @@ const moveRight = keyframes`
   }
 `;
 
-const StyledToggleDescription = styled.button`
+const StyledToggleDescriptionButton = styled.button`
   padding: 10px 20px;
   border: none;
   font-size: 16px;
@@ -329,8 +333,8 @@ export {
   StyledTable,
   StyledDescriptionContainer,
   StyledDescription,
-  StyledButton,
+  StyledBackButton,
   StyledTypeIcon,
-  StyledToggleDescription,
-  StyledToggleDescriptionContainer,
+  StyledToggleDescriptionButton,
+  StyledToggleDescriptionButtonButtonContainer,
 };

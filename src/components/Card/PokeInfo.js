@@ -21,9 +21,9 @@ import {
   StyledDescriptionContainer,
   StyledDescription,
   StyledTypeIcon,
-  StyledButton,
-  StyledToggleDescription,
-  StyledToggleDescriptionContainer,
+  StyledBackButton,
+  StyledToggleDescriptionButton,
+  StyledToggleDescriptionButtonButtonContainer,
 } from "./PokeInfo.styles";
 
 const colorBrightnessValue = -60;
@@ -183,9 +183,9 @@ const PokeInfo = ({
                       pokeInfo.descriptions[desIndex].flavor_text
                     )}
                   </StyledDescription>
-                  <StyledToggleDescriptionContainer>
+                  <StyledToggleDescriptionButtonButtonContainer>
                     {pokeInfo.descriptions.map((description, index) => (
-                      <StyledToggleDescription
+                      <StyledToggleDescriptionButton
                         onClick={() => toggleDescriptions(desIndex)}
                         $version={description.version}
                         $version2={
@@ -196,19 +196,19 @@ const PokeInfo = ({
                         $isPushed={isPushed.current}
                       >
                         <span>{description.version}</span>
-                      </StyledToggleDescription>
+                      </StyledToggleDescriptionButton>
                     ))}
-                  </StyledToggleDescriptionContainer>
-                  <StyledButton onClick={onClick}>
-                    <IconContext.Provider
-                      value={{
-                        color: "#9EC632",
-                        size: "40px",
-                      }}
-                    >
-                      <GiReturnArrow />
-                    </IconContext.Provider>
-                  </StyledButton>
+                    <StyledBackButton onClick={onClick}>
+                      <IconContext.Provider
+                        value={{
+                          color: "#9EC632",
+                          size: "40px",
+                        }}
+                      >
+                        <GiReturnArrow />
+                      </IconContext.Provider>
+                    </StyledBackButton>
+                  </StyledToggleDescriptionButtonButtonContainer>
                 </StyledDescriptionContainer>
               </>
             )}
