@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { getJapaneseType, getPokemonInfo } from "../../api/pokemonAPI";
 import { styled } from "styled-components";
 import { IconContext } from "react-icons";
@@ -65,6 +65,7 @@ const PokeInfo = ({
 }) => {
   const [desIndex, setDesIndex] = useState(0);
   const [pokeInfo, setPokeInfo] = useState({});
+  const isPushed = useRef(0);
 
   useEffect(() => {
     const fetchPokemonInfo = async () => {
@@ -75,7 +76,9 @@ const PokeInfo = ({
   }, [featuredPokemon]);
 
   const toggleDescriptions = (index) => {
+    console.log("toggleDescriptionsが実行されました");
     setDesIndex(index === 0 ? 1 : 0);
+    if (isPushed.current === 0) isPushed.current = 1;
   };
 
   const SplitByFullWidthSpace = (text) => {
@@ -174,7 +177,7 @@ const PokeInfo = ({
             </StyledTable>
             {Object.keys(pokeInfo).length > 0 && (
               <>
-                <StyledDescriptionContainer>
+                <StyledDescriptionContainer $isPushed={isPushed.current}>
                   <StyledDescription>
                     {SplitByFullWidthSpace(
                       pokeInfo.descriptions[desIndex].flavor_text
@@ -185,9 +188,12 @@ const PokeInfo = ({
                       <StyledToggleDescription
                         onClick={() => toggleDescriptions(desIndex)}
                         $version={description.version}
+                        $version2={
+                          pokeInfo.descriptions[index === 0 ? 1 : 0].version
+                        }
                         $isSelected={desIndex === index}
                         $desIndex={desIndex}
-                        $index={index}
+                        $isPushed={isPushed.current}
                       >
                         <span>{description.version}</span>
                       </StyledToggleDescription>

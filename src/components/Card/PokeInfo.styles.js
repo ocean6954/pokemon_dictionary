@@ -1,5 +1,5 @@
-import { styled } from "styled-components";
-import { COLORSETS, COLORSETS2 } from "../../type-sets";
+import { styled, keyframes, css } from "styled-components";
+import { COLORSETS } from "../../type-sets";
 
 const StyledInfoWrapper = styled.div`
   width: 100%;
@@ -173,7 +173,36 @@ const StyledToggleDescriptionContainer = styled.div`
   display: flex;
   margin: 20px auto;
   border-radius: 50px;
-  /* background-color: green; */
+  justify-content: stretch;
+`;
+
+const moveLeft = keyframes`
+  0% {
+    transform: translateX(100%);
+    border-radius: 0 50px 50px 0;
+    clip-path: polygon(20px 0, 100% 0, 100% 100%, 0 100%);
+  
+  }
+  100% {
+    border-radius: 50px 0 0 50px;
+    clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
+    transform: translateX(10px);
+  }
+`;
+const moveRight = keyframes`
+  0% {
+    transform: translateX(-100%);
+     border-radius: 50px 0 0 50px;
+    clip-path: polygon(0px 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
+
+  }
+  100% {
+    transform: translateX(-10px);
+    /* opacity:1; */
+    border-radius: 0 50px 50px 0;
+    clip-path: polygon(20px 0, 100% 0, 100% 100%, 0 100%);
+
+  }
 `;
 
 const StyledToggleDescription = styled.button`
@@ -181,96 +210,106 @@ const StyledToggleDescription = styled.button`
   border: none;
   font-size: 16px;
   font-weight: bold;
-
   transition: background-color 0.3s;
+  position: relative;
+  z-index: 2;
+  flex-grow: 1;
 
-  ${({ $isSelected, $desIndex, $version }) =>
+  //左が選択されている時のコード
+  ${({ $isSelected, $desIndex, $version, $isPushed, $version2 }) =>
     $desIndex === 0 &&
-    `
-    ${
-      $isSelected
-        ? `
-      pointer-events: none;
-      background: linear-gradient(45deg, ${COLORSETS[$version].start}, ${COLORSETS[$version].end});
-      border-radius: 50px 0 0 50px;
-      clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0 100%);      
-      transform: translateX(10px) ;
-      & span {
-        color: var(--white);
-      }
-    `
-        : `
-        cursor: pointer;
-        background: var(--gray);
-        border-radius: 0 50px 50px 0;
-        clip-path: polygon(20px 0, 100% 0, 100% 100%, 0 100%);
-        transform: translateX(-10px) translateY(-3px);
+    css`
+      ${$isSelected
+        ? css`
+            z-index: 2;
+            pointer-events: none;
+            background: linear-gradient(
+              45deg,
+              ${COLORSETS[$version].start},
+              ${COLORSETS[$version].end}
+            );
+            border-radius: 50px 0 0 50px;
+            clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
+            transform: translateX(10px);
 
-      & span {
-        background: linear-gradient(45deg, ${COLORSETS[$version].start}, ${COLORSETS[$version].end});
-        -webkit-background-clip: text;
-        color: transparent;
-        display: inline-block;
-      }
-      &::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width:100%;
-        height: 100%;
-        // background:red;
-        opacity: 0.4;
-        z-index: 5;
+            & span {
+              color: var(--white);
+            }
+            ${$isPushed &&
+            css`
+              animation: ${moveLeft} 0.2s ease-in-out forwards;
+            `}
+          `
+        : css`
+            cursor: pointer;
+            background: var(--gray);
+            border-radius: 0 50px 50px 0;
+            clip-path: polygon(20px 0, 100% 0, 100% 100%, 0 100%);
+            transform: translateX(-10px) translateY(-3px);
 
-        &:hover {
-          // transform: translateY(3px) translateX(3px);
-        }
-      }
-      &:hover {
-        transform: translateX(-10px) translateY(1px);
-      }
-    `
-    }
-  `}
+            & span {
+              background: linear-gradient(
+                45deg,
+                ${COLORSETS[$version].start},
+                ${COLORSETS[$version].end}
+              );
+              -webkit-background-clip: text;
+              color: transparent;
+              display: inline-block;
+            }
 
+            &:hover {
+              transform: translateX(-10px) translateY(1px);
+            }
+          `}
+    `}
+
+  //右が選択されている時のコード
   ${({ $isSelected, $desIndex, $version }) =>
     $desIndex === 1 &&
-    `
-    ${
-      $isSelected
-        ? `
-      pointer-events: none;
-      background: linear-gradient(45deg, ${COLORSETS[$version].end}, ${COLORSETS[$version].start});
-      border-radius: 0 50px 50px 0;
-      clip-path: polygon(20px 0, 100% 0, 100% 100%, 0 100%);      
-      transform: translateX(-10px);
+    css`
+      ${$isSelected
+        ? css`
+            pointer-events: none;
+            background: linear-gradient(
+              45deg,
+              ${COLORSETS[$version].end},
+              ${COLORSETS[$version].start}
+            );
+            border-radius: 0 50px 50px 0;
+            /* clip-path: polygon(20px 0, 100% 0, 100% 100%, 0 100%); */
+            transform: translateX(-10px);
+            z-index: 999;
+            & span {
+              color: var(--white);
+            }
+            animation: ${moveRight} 0.2s ease-in-out forwards;
+          `
+        : css`
+            /* opacity: 0.1; */
+            cursor: pointer;
+            background: var(--gray);
+            border-radius: 50px 0 0 50px;
+            clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
+            transform: translateX(10px) translateY(-3px);
+            /* z-index: -1; */
 
-      & span {
-        color: var(--white);
-      }
+            & span {
+              background: linear-gradient(
+                45deg,
+                ${COLORSETS[$version].start},
+                ${COLORSETS[$version].end}
+              );
+              -webkit-background-clip: text;
+              color: transparent;
+              display: inline-block;
+            }
 
-    `
-        : `
-        cursor: pointer;
-        background: var(--gray);
-        border-radius: 50px 0 0 50px ;
-        clip-path: polygon(0 0, 100% 0, calc(100% - 20px) 100%, 0 100%);
-        transform: translateX(10px) translateY(-3px);
-
-      & span {
-        background: linear-gradient(45deg, ${COLORSETS[$version].start}, ${COLORSETS[$version].end});
-        -webkit-background-clip: text;
-        color: transparent;
-        display: inline-block;
-      }
-
-      &:hover {
-        transform: translateX(10px) translateY(1px);
-      }
-    `
-    }
-  `}
+            &:hover {
+              transform: translateX(10px) translateY(1px);
+            }
+          `}
+    `}
 `;
 
 export {
