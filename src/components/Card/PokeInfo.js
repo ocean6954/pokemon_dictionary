@@ -165,6 +165,7 @@ const PokeInfo = ({
                 <tr>
                   <th>高さ</th>
                   <td>{(featuredPokemon.height / 10).toFixed(1)}m</td>
+                  <td></td>
                 </tr>
                 <tr>
                   <th>重さ</th>

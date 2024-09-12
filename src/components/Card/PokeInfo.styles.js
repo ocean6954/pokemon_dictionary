@@ -111,6 +111,7 @@ const StyledTable = styled.table`
   width: 100%;
   margin: 10px 0;
   height: 200px;
+  border-spacing: 0;
 
   & tbody {
     width: 100%;
@@ -119,6 +120,14 @@ const StyledTable = styled.table`
   & th,
   td {
     vertical-align: middle; /* 垂直方向の中央揃え */
+    border-bottom: 4px solid rgba(169, 169, 169, 0.5); /* 透明度50% */
+  }
+
+  & tr:nth-last-of-type(1) {
+    & th,
+    td {
+      border-bottom: none;
+    }
   }
 
   & th {
